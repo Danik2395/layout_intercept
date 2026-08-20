@@ -1,0 +1,8 @@
+#pragma once
+#include <linux/input-event-codes.h>
+#include <stdint.h>
+#include "types.h"
+
+extern const th_conf_t taphold_config[KEY_MAX];
+
+extern const uint16_t layers_config[LAYERS_MAX_SIZE][KEY_MAX];

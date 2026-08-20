@@ -5,4 +5,4 @@
 extern const __u16 qwerty2layout[KEY_MAX];
 extern const __u16 qwerty2layout_shifted[KEY_MAX];
 
-__u16 remap_key(__u16 keycode, bool is_shift);
+__u16 remap_key_layout(__u16 keycode, bool is_shift);
