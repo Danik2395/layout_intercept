@@ -34,8 +34,7 @@ void make_key_type_lookup(global_state_t* gs)
     key_type_t* lookup = gs->key_type_lookup;
 
     uint16_t key_num = 0;
-    int key_index = KEY_MAX - 1;
-    while (key_num != key_index)
+    while (key_num != KEY_CNT)
     {
 	if (taphold_config[key_num].configured)
 	{
@@ -55,7 +54,7 @@ void preclassify_key_type(const global_state_t* gs, internal_event_t* ev)
 
 int postclassify_key_type(const global_state_t* gs, internal_event_t* ev)
 {
-    if (ev->keycode < KEY_MAX) return 0;
+    if (ev->keycode <= KEY_MAX) return 0;
 
     if (ev->keycode & LAYER_BASE)
     {

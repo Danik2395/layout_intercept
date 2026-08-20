@@ -64,11 +64,12 @@ typedef struct
 typedef struct
 {
     uint64_t prev_key_time_ms;
+    pressed_state_t pressed_state[KEY_CNT];
+
+    const th_conf_t* th_conf; // size KEY_CNT
 
     layer_t layers_mask;
-    pressed_state_t pressed_state;
+    const uint16_t (*layers_conf)[KEY_CNT]; // size LAYERS_MAX_SIZE KEY_CNT
 
-    const th_conf_t* th_conf; // size KEY_MAX
-    const uint16_t (*layers_conf)[KEY_MAX]; // size LAYERS_MAX_SIZE KEY_MAX
-    key_type_t key_type_lookup[KEY_MAX];
+    key_type_t key_type_lookup[KEY_CNT];
 } global_state_t;

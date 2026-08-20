@@ -1,6 +1,6 @@
 #include "../layout.h"
 
-const __u16 qwerty2layout[KEY_MAX] = {
+const __u16 qwerty2layout[KEY_CNT] = {
     // Numbers row
     [KEY_GRAVE]      = KEY_GRAVE,       // <TLDE> ` ~
     [KEY_1]          = KEY_1,           // <AE01> 1 !
@@ -57,7 +57,7 @@ const __u16 qwerty2layout[KEY_MAX] = {
     [KEY_SLASH]      = KEY_SLASH,       // <AB10> / <  (Non standart shift)
 };
 
-const __u16 qwerty2layout_shifted[KEY_MAX] = {
+const __u16 qwerty2layout_shifted[KEY_CNT] = {
     // Underscore = Shift + KEY_MINUS
     [KEY_Y]          = KEY_MINUS,
 
