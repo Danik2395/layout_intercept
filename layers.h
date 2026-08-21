@@ -25,7 +25,7 @@ inline bool is_layer(const layer_t* mask, layer_t layer)
 
 static layer_t keycode_to_layer_type(const internal_event_t* ev);
 
-// return 1 if key was remapped
+// return 1 if key was remapped,
 // return 0 if wasn't
 int remap_key_layer(global_state_t* gs, internal_event_t* ev);
 
