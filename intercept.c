@@ -7,7 +7,7 @@
 #include "config.h"
 #include "types.h"
 #include "utils.h"
-#include "finit_automaton.h"
+#include "finite_automaton.h"
 #include "layout.h"
 
 int main(void)
