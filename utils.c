@@ -2,13 +2,18 @@
 #include <stdint.h>
 #include <linux/input.h>
 #include <linux/input-event-codes.h>
+#include <time.h>
 #include "utils.h"
 #include "config.h"
 #include "types.h"
 
-uint64_t timeval_to_ms(const struct timeval* tv)
+uint64_t get_time_ms()
 {
-    return (uint64_t)tv->tv_sec * 1000 + (uint64_t)tv->tv_usec / 1000;
+    struct timespec time;
+
+    (void)clock_gettime(CLOCK_MONOTONIC, &time);
+
+    return (uint64_t)time.tv_sec * 1000 + (uint64_t)time.tv_nsec * 1e-6;
 }
 
 internal_event_t event_to_internal(const struct input_event* ev)
@@ -16,7 +21,7 @@ internal_event_t event_to_internal(const struct input_event* ev)
     internal_event_t internal_ev = {
 	.keycode = ev->code,
 	.keystroke = ev->value,
-	.key_time_ms = timeval_to_ms(&ev->time)
+	.key_time_ms = get_time_ms()
     };
     return internal_ev;
 }

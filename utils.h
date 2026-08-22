@@ -4,7 +4,7 @@
 #include <stdint.h>
 #include "types.h"
 
-uint64_t timeval_to_ms(const struct timeval* tv);
+uint64_t get_time_ms();
 
 internal_event_t event_to_internal(const struct input_event* ev);
 
