@@ -23,6 +23,8 @@ typedef enum
     LAYER           // Toggles layer
 } key_type_t;
 
+#define LAST_TO_SEND_KEY_TYPE OVERLOAD_TIMER
+
 typedef enum
 {
     DOWN,
@@ -64,8 +66,10 @@ typedef struct
 typedef struct
 {
     uint64_t prev_key_time_ms;
+    bool suspend_event;
     pressed_state_t pressed_state[KEY_CNT];
 
+    th_pending_t th_pending;
     const th_conf_t* th_conf; // size KEY_CNT
 
     layer_t layers_mask;

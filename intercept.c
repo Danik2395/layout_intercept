@@ -5,10 +5,13 @@
 #include <stdbool.h>
 #include <sys/poll.h>
 #include "config.h"
+#include "tap-hold.h"
+#include "overload_timer.h"
 #include "types.h"
 #include "utils.h"
 #include "finite_automaton.h"
 #include "layout.h"
+#include "layers.h"
 
 int main(void)
 {
@@ -21,14 +24,14 @@ int main(void)
 	.events = POLLIN
     };
 
-    struct input_event event;
-    internal_event_t internal_event;
+    struct input_event raw_event;
+    internal_event_t event;
 
     global_state_t gs = {0};
     gs.th_conf = taphold_config;
     gs.layers_conf = layers_config;
 
-    (void)make_key_type_lookup(&gs);
+    make_key_type_lookup(&gs);
 
     while (1)
     {
@@ -36,16 +39,56 @@ int main(void)
 
 	if (fds.revents & (POLLIN | POLLHUP))
 	{
-	    if (fread(&event, sizeof(event), 1, stdin) != 1) break;
+	    if (fread(&raw_event, sizeof(raw_event), 1, stdin) != 1) break;
 	}
 
 	if (pr > 0)
 	{
-	    if (!wanted_key_mask(&event)) continue; // не континью тут. тут нужно, чтобы оно съедало ивенты синхронизации,
-						    // которые идут после вонтед_ки
-						    // а ещё нужно пропускать все остальные ивенты
+	    if (!wanted_key_mask(&raw_event))
+	    {
+		if (gs.suspend_event)
+		{
+		    gs.suspend_event = false;
+		    continue;
+		}
 
-	    internal_event = event_to_internal(&event);
+		(void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
+		continue;
+	    }
+	    gs.suspend_event = true;
+
+	    event = event_to_internal(&raw_event);
+	    preclassify_key_type(&gs, &event);
+
+	    if (event.key_type == TAPHOLD || event.key_type == NORMAL && gs.th_pending.active)
+	    {
+		implement_tap_hold(&gs, &event);
+	    }
+	    else if (event.key_type == OVERLOAD_TIMER)
+	    {
+		implement_overload_timer(&gs, &event);
+	    }
+
+	    if (event.key_type != NORMAL && postclassify_key_type(&gs, &event))
+	    {
+		if (event.key_type == LAYER)
+		{
+		    handle_layer_key(&gs, &event);
+
+		    finite_event(&gs, &event);
+
+		    continue;
+		}
+
+		// ...
+	    }
+
+	    if (!remap_key_layer(&gs, &event))
+	    {
+		(void)remap_key_layout(&gs, &event);
+	    }
+
+	    finite_event(&gs, &event);
 	}
 	else if (pr == 0)
 	{
