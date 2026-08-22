@@ -7,7 +7,7 @@ int remap_key_layout(const global_state_t* gs, internal_event_t* ev)
 {
     uint16_t mapped = 0;
 
-    if (is_layer(&gs->layers_mask, LAYER_SHIFT_MASK))
+    if (is_layer(gs->layers_mask, LAYER_SHIFT_MASK))
     {
 	mapped = qwerty2layout_shifted[ev->keycode];
 

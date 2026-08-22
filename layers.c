@@ -33,7 +33,7 @@ int remap_key_layer(const global_state_t* gs, internal_event_t* ev)
 int handle_layer_key(global_state_t* gs, const internal_event_t* ev)
 {
     layer_t layer = keycode_to_layer_type(ev);
-    bool layer_enabled = is_layer(&gs->layers_mask, layer);
+    bool layer_enabled = is_layer(gs->layers_mask, layer);
 
     int layer_changed = 0;
 

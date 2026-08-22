@@ -18,9 +18,9 @@ inline void layer_disable(layer_t* mask, layer_t layer)
     // 0000 0010
 }
 
-inline bool is_layer(const layer_t* mask, layer_t layer)
+inline bool is_layer(layer_t mask, layer_t layer)
 {
-    return (*mask & layer) != 0;
+    return (mask & layer) != 0;
 }
 
 static layer_t keycode_to_layer_type(const internal_event_t* ev);
