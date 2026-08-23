@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#define EPOLL_EVENTS_MAX 16
+
 #define LAYER_SHIFT_MASK (1U << 0)
 #define LAYER_CTRL_MASK  (1U << 1)
 #define LAYER_ALT_MASK   (1U << 2)
@@ -34,6 +36,7 @@ typedef enum
 
 typedef struct
 {
+    uint16_t keycode_raw;
     uint16_t keycode;
     keystroke_t keystroke;
     key_type_t key_type;
@@ -67,6 +70,9 @@ typedef struct
 {
     uint64_t prev_key_time_ms;
     bool suspend_event;
+
+    internal_event_t key_waiting[KEY_CNT];
+    int key_fds[KEY_CNT];
     pressed_state_t pressed_state[KEY_CNT];
 
     th_pending_t th_pending;

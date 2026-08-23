@@ -1,9 +1,10 @@
 #include <linux/input-event-codes.h>
 #include <linux/input.h>
+#include <stdint.h>
 #include <stdio.h>
-#include <poll.h>
+#include <unistd.h>
 #include <stdbool.h>
-#include <sys/poll.h>
+#include <sys/epoll.h>
 #include "config.h"
 #include "tap-hold.h"
 #include "overload_timer.h"
@@ -12,6 +13,7 @@
 #include "finite_automaton.h"
 #include "layout.h"
 #include "layers.h"
+#include "poll_operations.h"
 
 int main(void)
 {
@@ -19,10 +21,16 @@ int main(void)
     setbuf(stdin, NULL);
     setbuf(stdout, NULL);
 
-    struct pollfd fds = {
-	.fd = stdin,
-	.events = POLLIN
+    const char stdin_marker = 0;
+    struct epoll_event epoll_events[EPOLL_EVENTS_MAX];
+    struct epoll_event stdin_epoll_ev = {
+	.events = EPOLLIN,
+	.data.ptr = (void*)&stdin_marker
     };
+
+    int epollfd = epoll_create(1);
+
+    (void)epoll_ctl(epollfd, EPOLL_CTL_ADD, STDIN_FILENO, &stdin_epoll_ev);
 
     struct input_event raw_event;
     internal_event_t event;
@@ -32,41 +40,64 @@ int main(void)
     gs.layers_conf = layers_config;
 
     make_key_type_lookup(&gs);
+    make_key_fds(&gs, epollfd);
 
+    int ret = 0;
     while (1)
     {
-	int pr = poll(&fds, 1, );
+	int nfds = epoll_wait(epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
 
-	if (fds.revents & (POLLIN | POLLHUP))
+	if (nfds == -1)
 	{
-	    if (fread(&raw_event, sizeof(raw_event), 1, stdin) != 1) break;
+	    ret = 1;
+	    goto freefd;
 	}
 
-	if (pr > 0)
+	for (int n = 0; n < nfds; ++n)
 	{
-	    if (!wanted_key_mask(&raw_event))
+	    struct epoll_event* epoll_event = &epoll_events[n];
+
+	    if (epoll_event->data.ptr == (void*)&stdin_marker)
 	    {
-		if (gs.suspend_event)
+		if (!(epoll_event->events & EPOLLIN)) continue;
+
+		if (fread(&raw_event, sizeof(raw_event), 1, stdin) != 1) goto freefd;
+
+		if (!wanted_key_mask(&raw_event))
 		{
-		    gs.suspend_event = false;
+		    if (gs.suspend_event)
+		    {
+			gs.suspend_event = false;
+			continue;
+		    }
+
+		    (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
 		    continue;
 		}
+		gs.suspend_event = true;
 
-		(void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
-		continue;
+		event = event_to_internal(&raw_event);
+		preclassify_key_type(&gs, &event);
+
+		if (event.key_type == TAPHOLD || event.key_type == NORMAL && gs.th_pending.active)
+		{
+		    if (!implement_tap_hold(&gs, &event)) continue;
+		}
+		else if (event.key_type == OVERLOAD_TIMER)
+		{
+		    if (!implement_overload_timer(&gs, &event)) continue;
+		}
 	    }
-	    gs.suspend_event = true;
-
-	    event = event_to_internal(&raw_event);
-	    preclassify_key_type(&gs, &event);
-
-	    if (event.key_type == TAPHOLD || event.key_type == NORMAL && gs.th_pending.active)
+	    else // On timer interrupt
 	    {
-		implement_tap_hold(&gs, &event);
-	    }
-	    else if (event.key_type == OVERLOAD_TIMER)
-	    {
-		implement_overload_timer(&gs, &event);
+		event = *(internal_event_t*)epoll_event->data.ptr; // From key_waiting
+
+		int on_timer_fd = gs.key_fds[event.keycode_raw];
+
+		int buff_clean = 0;
+		(void)read(on_timer_fd, &buff_clean, sizeof(uint64_t));
+
+
 	    }
 
 	    if (event.key_type != NORMAL && postclassify_key_type(&gs, &event))
@@ -90,12 +121,10 @@ int main(void)
 
 	    finite_event(&gs, &event);
 	}
-	else if (pr == 0)
-	{
-
-	}
-	else if (pr < 0) return 1;
     }
 
-    return 0;
+freefd:
+    close(epollfd);
+    close_key_fds(&gs);
+    return ret;
 }
