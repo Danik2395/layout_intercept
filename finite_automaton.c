@@ -44,5 +44,13 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         .time = {0, 0}
     };
 
+    struct input_event report_event = {
+        .type = EV_SYN,
+        .code = SYN_REPORT,
+        .value = 0,
+        .time = {0, 0}
+    };
+
     (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
+    (void)fwrite(&report_event, sizeof(report_event), 1, stdout);
 }

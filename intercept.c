@@ -65,7 +65,7 @@ int main(void)
 
                 if (!wanted_key_mask(&raw_event))
                 {
-                    if (gs.suspend_event) // нужно добавить проверку на синх ивент
+                    if (gs.suspend_event && raw_event.type == EV_SYN)
                     {
                         gs.suspend_event = false;
                         continue;
