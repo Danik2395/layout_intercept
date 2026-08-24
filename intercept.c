@@ -104,7 +104,7 @@ int main(void)
 	    {
 		if (event.key_type == LAYER)
 		{
-		    handle_layer_key(&gs, &event);
+		    (void)handle_layer_key(&gs, &event);
 
 		    finite_event(&gs, &event);
 

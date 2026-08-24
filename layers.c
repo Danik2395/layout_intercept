@@ -37,12 +37,12 @@ int handle_layer_key(global_state_t* gs, const internal_event_t* ev)
 
     int layer_changed = 0;
 
-    if (ev->keystroke == DOWN && layer_enabled)
+    if (ev->keystroke == DOWN && !layer_enabled)
     {
 	layer_enable(&gs->layers_mask, layer);
 	layer_changed = 1;
     }
-    else if (ev->keystroke == UP && !layer_enabled)
+    else if (ev->keystroke == UP && layer_enabled)
     {
 	layer_disable(&gs->layers_mask, layer);
 	layer_changed = 1;

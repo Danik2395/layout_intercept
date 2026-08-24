@@ -29,8 +29,8 @@ typedef enum
 
 typedef enum
 {
-    DOWN,
     UP,
+    DOWN,
     REPEAT
 } keystroke_t;
 
