@@ -79,6 +79,12 @@ int main(void)
                 event = event_to_internal(&raw_event);
                 preclassify_key_type(&gs, &event);
 
+                if (remap_key_layer(&gs, &event))
+                {
+                    finite_event(&gs, &event);
+                    continue;
+                }
+
                 if (event.key_type == TAPHOLD || event.key_type == NORMAL && gs.th_pending.active)
                 {
                     if (!implement_tap_hold(&gs, &event)) continue;
@@ -114,10 +120,7 @@ int main(void)
                 // ...
             }
 
-            if (!remap_key_layer(&gs, &event))
-            {
-                (void)remap_key_layout(&gs, &event);
-            }
+            (void)remap_key_layout(&gs, &event);
 
             finite_event(&gs, &event);
         }
