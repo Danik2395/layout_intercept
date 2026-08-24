@@ -24,8 +24,8 @@ int main(void)
     const char stdin_marker = 0;
     struct epoll_event epoll_events[EPOLL_EVENTS_MAX];
     struct epoll_event stdin_epoll_ev = {
-	.events = EPOLLIN,
-	.data.ptr = (void*)&stdin_marker
+        .events = EPOLLIN,
+        .data.ptr = (void*)&stdin_marker
     };
 
     int epollfd = epoll_create(1);
@@ -45,82 +45,82 @@ int main(void)
     int ret = 0;
     while (1)
     {
-	int nfds = epoll_wait(epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
+        int nfds = epoll_wait(epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
 
-	if (nfds == -1)
-	{
-	    ret = 1;
-	    goto freefd;
-	}
+        if (nfds == -1)
+        {
+            ret = 1;
+            goto freefd;
+        }
 
-	for (int n = 0; n < nfds; ++n)
-	{
-	    struct epoll_event* epoll_event = &epoll_events[n];
+        for (int n = 0; n < nfds; ++n)
+        {
+            struct epoll_event* epoll_event = &epoll_events[n];
 
-	    if (epoll_event->data.ptr == (void*)&stdin_marker)
-	    {
-		if (!(epoll_event->events & EPOLLIN)) continue;
+            if (epoll_event->data.ptr == (void*)&stdin_marker)
+            {
+                if (!(epoll_event->events & EPOLLIN)) continue;
 
-		if (fread(&raw_event, sizeof(raw_event), 1, stdin) != 1) goto freefd;
+                if (fread(&raw_event, sizeof(raw_event), 1, stdin) != 1) goto freefd;
 
-		if (!wanted_key_mask(&raw_event))
-		{
-		    if (gs.suspend_event)
-		    {
-			gs.suspend_event = false;
-			continue;
-		    }
+                if (!wanted_key_mask(&raw_event))
+                {
+                    if (gs.suspend_event) // нужно добавить проверку на синх ивент
+                    {
+                        gs.suspend_event = false;
+                        continue;
+                    }
 
-		    (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
-		    continue;
-		}
-		gs.suspend_event = true;
+                    (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
+                    continue;
+                }
+                gs.suspend_event = true;
 
-		event = event_to_internal(&raw_event);
-		preclassify_key_type(&gs, &event);
+                event = event_to_internal(&raw_event);
+                preclassify_key_type(&gs, &event);
 
-		if (event.key_type == TAPHOLD || event.key_type == NORMAL && gs.th_pending.active)
-		{
-		    if (!implement_tap_hold(&gs, &event)) continue;
-		}
-		else if (event.key_type == OVERLOAD_TIMER)
-		{
-		    if (!implement_overload_timer(&gs, &event)) continue;
-		}
-	    }
-	    else // On timer interrupt
-	    {
-		event = *(internal_event_t*)epoll_event->data.ptr; // From key_waiting
+                if (event.key_type == TAPHOLD || event.key_type == NORMAL && gs.th_pending.active)
+                {
+                    if (!implement_tap_hold(&gs, &event)) continue;
+                }
+                else if (event.key_type == OVERLOAD_TIMER)
+                {
+                    if (!implement_overload_timer(&gs, &event)) continue;
+                }
+            }
+            else // On timer interrupt
+            {
+                event = *(internal_event_t*)epoll_event->data.ptr; // From key_waiting
 
-		int on_timer_fd = gs.key_fds[event.keycode_raw];
+                int on_timer_fd = gs.key_fds[event.keycode_raw];
 
-		int buff_clean = 0;
-		(void)read(on_timer_fd, &buff_clean, sizeof(uint64_t));
+                int buff_clean = 0;
+                (void)read(on_timer_fd, &buff_clean, sizeof(uint64_t));
 
 
-	    }
+            }
 
-	    if (event.key_type != NORMAL && postclassify_key_type(&gs, &event))
-	    {
-		if (event.key_type == LAYER)
-		{
-		    (void)handle_layer_key(&gs, &event);
+            if (event.key_type != NORMAL && postclassify_key_type(&gs, &event))
+            {
+                if (event.key_type == LAYER)
+                {
+                    (void)handle_layer_key(&gs, &event);
 
-		    finite_event(&gs, &event);
+                    finite_event(&gs, &event);
 
-		    continue;
-		}
+                    continue;
+                }
 
-		// ...
-	    }
+                // ...
+            }
 
-	    if (!remap_key_layer(&gs, &event))
-	    {
-		(void)remap_key_layout(&gs, &event);
-	    }
+            if (!remap_key_layer(&gs, &event))
+            {
+                (void)remap_key_layout(&gs, &event);
+            }
 
-	    finite_event(&gs, &event);
-	}
+            finite_event(&gs, &event);
+        }
     }
 
 freefd:

@@ -16,32 +16,32 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
 
     if (ev->key_type > LAST_TO_SEND_KEY_TYPE)
     {
-	if (!key_active) return;
+        if (!key_active) return;
 
-	// if (ev->key_type == LAYER)
-	// {
-	key_state->key_send = 0;
-	key_state->layer_held = ev->layer;
-	key_state->time_send = time;
-	// }
+        // if (ev->key_type == LAYER)
+        // {
+        key_state->key_send = 0;
+        key_state->layer_held = ev->layer;
+        key_state->time_send = time;
+        // }
 
-	// ...
+        // ...
 
-	return;
+        return;
     }
 
     if (key_active)
     {
-	key_state->key_send = ev->keycode;
-	key_state->layer_held = 0;
-	key_state->time_send = time;
+        key_state->key_send = ev->keycode;
+        key_state->layer_held = 0;
+        key_state->time_send = time;
     }
 
     struct input_event raw_event = {
-	.code = ev->keycode,
-	.type = EV_KEY,
-	.value = ev->keystroke,
-	.time = {0, 0}
+        .code = ev->keycode,
+        .type = EV_KEY,
+        .value = ev->keystroke,
+        .time = {0, 0}
     };
 
     (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
