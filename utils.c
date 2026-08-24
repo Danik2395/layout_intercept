@@ -65,6 +65,7 @@ int postclassify_key_type(const global_state_t* gs, internal_event_t* ev)
     if (ev->keycode & LAYER_BASE)
     {
 	ev->key_type = LAYER;
+	ev->layer = ev->keycode - LAYER_BASE;
     }
 
     // ...

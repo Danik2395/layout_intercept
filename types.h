@@ -38,6 +38,7 @@ typedef struct
 {
     uint16_t keycode_raw;
     uint16_t keycode;
+    layer_t layer;
     keystroke_t keystroke;
     key_type_t key_type;
     uint64_t key_time_ms;
