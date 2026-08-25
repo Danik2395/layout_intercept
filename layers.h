@@ -2,7 +2,7 @@
 #include <stdbool.h>
 #include "types.h"
 
-inline void layer_enable(layer_t* mask, layer_t layer)
+static inline void layer_enable(layer_t* mask, layer_t layer)
 {
     *mask |= layer;
     // 0000 0001
@@ -10,7 +10,7 @@ inline void layer_enable(layer_t* mask, layer_t layer)
     // 0000 0011
 }
 
-inline void layer_disable(layer_t* mask, layer_t layer)
+static inline void layer_disable(layer_t* mask, layer_t layer)
 {
     *mask &= ~layer;
     // 0000 0011
@@ -18,7 +18,7 @@ inline void layer_disable(layer_t* mask, layer_t layer)
     // 0000 0010
 }
 
-inline bool is_layer(layer_t mask, layer_t layer)
+static inline bool is_layer(layer_t mask, layer_t layer)
 {
     return (mask & layer) != 0;
 }

@@ -13,7 +13,7 @@ uint64_t get_time_ms()
 
     (void)clock_gettime(CLOCK_MONOTONIC, &time);
 
-    return (uint64_t)time.tv_sec * 1000 + (uint64_t)time.tv_nsec * 1e-6;
+    return (uint64_t)time.tv_sec * 1000 + (uint64_t)time.tv_nsec / 1000000;
 }
 
 internal_event_t event_to_internal(const struct input_event* ev)
@@ -39,16 +39,13 @@ void make_key_type_lookup(global_state_t* gs)
 {
     key_type_t* lookup = gs->key_type_lookup;
 
-    uint16_t key_num = 0;
-    while (key_num != KEY_CNT)
+    for (int code = 0; code < KEY_CNT; ++code)
     {
-        if (taphold_config[key_num].configured)
+        if (taphold_config[code].configured)
         {
-            lookup[key_num] = TAPHOLD;
+            lookup[code] = TAPHOLD;
         }
     }
-
-    key_num = 0;
 
     // ...
 }
