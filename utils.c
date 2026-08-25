@@ -29,9 +29,9 @@ internal_event_t event_to_internal(const struct input_event* ev)
 
 bool wanted_key_mask(const struct input_event* ev)
 {
-    bool is_wanted_key = ev->type == EV_KEY &&                                         // Key
-        ev->value < 2 &&                                                               // Not repeat
-        (ev->code >= KEY_ESC && ev->code <= KEY_CAPSLOCK || ev->code == KEY_RIGHTALT); // Only valit keys
+    bool is_wanted_key = ev->type == EV_KEY && // Key
+        ev->value < 2 &&                       // Not repeat
+        wanted_keycode(ev->code);              // Only valid keys
     return is_wanted_key;
 }
 

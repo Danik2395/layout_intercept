@@ -103,8 +103,6 @@ int main(void)
 
                 int buff_clean = 0;
                 (void)read(on_timer_fd, &buff_clean, sizeof(uint64_t));
-
-
             }
 
             if (event.key_type != NORMAL && postclassify_key_type(&gs, &event))
