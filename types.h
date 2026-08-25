@@ -72,8 +72,9 @@ typedef struct
     uint64_t prev_key_time_ms;
     bool suspend_event;
 
-    internal_event_t key_waiting[KEY_CNT];
+    int epollfd;
     int key_fds[KEY_CNT];
+    internal_event_t key_waiting[KEY_CNT];
     pressed_state_t pressed_state[KEY_CNT];
 
     th_pending_t th_pending;

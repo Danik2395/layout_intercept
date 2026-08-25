@@ -21,17 +21,6 @@ int main(void)
     setbuf(stdin, NULL);
     setbuf(stdout, NULL);
 
-    const char stdin_marker = 0;
-    struct epoll_event epoll_events[EPOLL_EVENTS_MAX];
-    struct epoll_event stdin_epoll_ev = {
-        .events = EPOLLIN,
-        .data.ptr = (void*)&stdin_marker
-    };
-
-    int epollfd = epoll_create(1);
-
-    (void)epoll_ctl(epollfd, EPOLL_CTL_ADD, STDIN_FILENO, &stdin_epoll_ev);
-
     struct input_event raw_event;
     internal_event_t event;
 
@@ -40,12 +29,24 @@ int main(void)
     gs.layers_conf = layers_config;
 
     make_key_type_lookup(&gs);
-    make_key_fds(&gs, epollfd);
+
+    const char stdin_marker = 0;
+    struct epoll_event epoll_events[EPOLL_EVENTS_MAX];
+    struct epoll_event stdin_epoll_ev = {
+        .events = EPOLLIN,
+        .data.ptr = (void*)&stdin_marker
+    };
+
+    gs.epollfd = epoll_create(1);
+
+    (void)epoll_ctl(gs.epollfd, EPOLL_CTL_ADD, STDIN_FILENO, &stdin_epoll_ev);
+
+    make_key_fds(&gs);
 
     int ret = 0;
     while (1)
     {
-        int nfds = epoll_wait(epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
+        int nfds = epoll_wait(gs.epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
 
         if (nfds == -1)
         {
@@ -127,7 +128,7 @@ int main(void)
     }
 
 freefd:
-    close(epollfd);
+    close(gs.epollfd);
     close_key_fds(&gs);
     return ret;
 }
