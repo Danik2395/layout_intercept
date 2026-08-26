@@ -9,7 +9,7 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
     uint64_t time = get_time_ms();
     gs->prev_key_time_ms = time;
 
-    pressed_state_t* key_state = &gs->pressed_state[ev->keycode];
+    pressed_state_t* key_state = &gs->pressed_state[ev->keycode_raw];
 
     bool key_active = ev->keystroke ? true : false;
     key_state->active = key_active;
@@ -20,9 +20,9 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
 
         // if (ev->key_type == LAYER)
         // {
-        key_state->key_send = 0;
+        key_state->keycodes_sent = (key_batch_t){0};
         key_state->layer_held = ev->layer;
-        key_state->time_send = time;
+        key_state->time_sent = time;
         // }
 
         // ...
@@ -32,13 +32,12 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
 
     if (key_active)
     {
-        key_state->key_send = ev->keycode;
+        key_state->keycodes_sent = ev->st_keycodes;
         key_state->layer_held = 0;
-        key_state->time_send = time;
+        key_state->time_sent = time;
     }
 
     struct input_event raw_event = {
-        .code = ev->keycode,
         .type = EV_KEY,
         .value = ev->keystroke,
         .time = {0, 0}
@@ -51,6 +50,15 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         .time = {0, 0}
     };
 
-    (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
-    (void)fwrite(&report_event, sizeof(report_event), 1, stdout);
+    for (int n = 0; n < BATCH_SIZE; ++n)
+    {
+        uint16_t keycode = ev->keycodes[n];
+
+        if (keycode == 0) break;
+
+        raw_event.code = keycode;
+
+        (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
+        (void)fwrite(&report_event, sizeof(report_event), 1, stdout);
+    }
 }

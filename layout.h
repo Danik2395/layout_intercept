@@ -1,9 +1,10 @@
 #pragma once
-#include <linux/input.h>
+#include <linux/input-event-codes.h>
+#include <stdint.h>
 #include "types.h"
 
-extern const uint16_t qwerty2layout[KEY_CNT];
-extern const uint16_t qwerty2layout_shifted[KEY_CNT];
+extern const key_batch_t qwerty2layout[KEY_CNT];
+extern const key_batch_t qwerty2layout_shifted[KEY_CNT];
 
 // return 1 if key was remapped,
 // return 0 if wasn't

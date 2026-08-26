@@ -5,24 +5,24 @@
 
 int remap_key_layout(const global_state_t* gs, internal_event_t* ev)
 {
-    uint16_t mapped = 0;
+    key_batch_t mapped = {0};
 
     if (is_layer(gs->layers_mask, LAYER_SHIFT_MASK))
     {
-        mapped = qwerty2layout_shifted[ev->keycode];
+        mapped = qwerty2layout_shifted[ev->keycode_raw];
 
-        if (mapped)
+        if (mapped.keycodes[0])
         {
-            ev->keycode = mapped;
+            ev->st_keycodes = mapped;
             return 1;
         }
     }
 
-    mapped = qwerty2layout[ev->keycode];
+    mapped = qwerty2layout[ev->keycode_raw];
 
-    if (mapped)
+    if (mapped.keycodes[0])
     {
-        ev->keycode = mapped;
+        ev->st_keycodes = mapped;
         return 1;
     }
 

@@ -1,7 +1,8 @@
+#include <linux/input-event-codes.h>
 #include <stdint.h>
 #include "../layout.h"
 
-const uint16_t qwerty2layout[KEY_CNT] = {
+const key_batch_t qwerty2layout[KEY_CNT] = {
     // Numbers row
     [KEY_GRAVE]      = KEY_GRAVE,       // <TLDE> ` ~
     [KEY_1]          = KEY_1,           // <AE01> 1 !
@@ -58,7 +59,7 @@ const uint16_t qwerty2layout[KEY_CNT] = {
       [KEY_SLASH]      = KEY_SLASH,       // <AB10> / <  (Non standart shift)
 };
 
-const uint16_t qwerty2layout_shifted[KEY_CNT] = {
+const key_batch_t qwerty2layout_shifted[KEY_CNT] = {
     // Underscore = Shift + KEY_MINUS
     [KEY_Y]          = KEY_MINUS,
 

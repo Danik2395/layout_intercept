@@ -20,7 +20,7 @@ internal_event_t event_to_internal(const struct input_event* ev)
 {
     internal_event_t internal_ev = {
         .keycode_raw = ev->code,
-        .keycode = ev->code,
+        .st_keycodes = ev->code,
         .keystroke = ev->value,
         .key_time_ms = get_time_ms()
     };
@@ -44,12 +44,12 @@ void make_key_type_lookup(global_state_t* gs)
 
 int postclassify_key_type(const global_state_t* gs, internal_event_t* ev)
 {
-    if (ev->keycode <= KEY_MAX) return 0;
+    if (ev->keycodes[0] <= KEY_MAX) return 0;
 
-    if (ev->keycode & LAYER_BASE)
+    if (ev->keycodes[0] & LAYER_BASE)
     {
         ev->key_type = LAYER;
-        ev->layer = ev->keycode - LAYER_BASE;
+        ev->layer = ev->keycodes[0] - LAYER_BASE;
     }
 
     // ...

@@ -34,10 +34,22 @@ typedef enum
     REPEAT
 } keystroke_t;
 
+#define BATCH_SIZE 4
+typedef uint16_t batch_t[BATCH_SIZE];
+
+typedef struct
+{
+    batch_t keycodes;
+} key_batch_t;
+
 typedef struct
 {
     uint16_t keycode_raw;
-    uint16_t keycode;
+    union
+    {
+        key_batch_t st_keycodes;
+        batch_t keycodes;
+    };
     layer_t layer;
     keystroke_t keystroke;
     key_type_t key_type;
@@ -48,16 +60,16 @@ typedef struct
 {
     uint64_t idle_time;
     uint64_t hold_time;
-    uint16_t tap_key;
-    uint16_t hold_key;
+    key_batch_t tap_keycodes;
+    key_batch_t hold_keycodes;
     bool configured;
 } th_conf_t;
 
 typedef struct
 {
     bool active;
-    uint16_t key_send;
-    uint64_t time_send;
+    key_batch_t keycodes_sent;
+    uint64_t time_sent;
     layer_t layer_held;
 } pressed_state_t;
 
@@ -81,7 +93,7 @@ typedef struct
     const th_conf_t* th_conf; // size KEY_CNT
 
     layer_t layers_mask;
-    const uint16_t (*layers_conf)[KEY_CNT]; // size LAYERS_MAX_SIZE KEY_CNT
+    const key_batch_t (*layers_conf)[KEY_CNT]; // size LAYERS_MAX_SIZE KEY_CNT
 
     key_type_t key_type_lookup[KEY_CNT];
 } global_state_t;
