@@ -64,7 +64,7 @@ int main(void)
 
                 if (fread(&raw_event, sizeof(raw_event), 1, stdin) != 1) goto freefd;
 
-                if (!wanted_key_mask(&raw_event))
+                if (!wanted_event_mask(&raw_event))
                 {
                     if (gs.suspend_event && raw_event.type == EV_SYN)
                     {

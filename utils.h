@@ -9,7 +9,7 @@ static inline bool wanted_keycode(uint16_t code)
     return (code >= KEY_ESC && code <= KEY_CAPSLOCK || code == KEY_RIGHTALT);
 }
 
-static inline bool wanted_key_mask(const struct input_event* ev)
+static inline bool wanted_event_mask(const struct input_event* ev)
 {
     bool is_wanted_key = ev->type == EV_KEY && // Key
         ev->value < 2 &&                       // Not repeat
