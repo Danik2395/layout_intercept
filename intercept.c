@@ -126,7 +126,6 @@ int main(void)
     }
 
 freefd:
-    close(gs.epollfd);
-    close_key_fds(&gs);
+    close_fds(&gs);
     return ret;
 }

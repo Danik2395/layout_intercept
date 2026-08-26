@@ -24,13 +24,14 @@ void make_key_fds(global_state_t* gs)
     }
 }
 
-void close_key_fds(global_state_t* gs)
+void close_fds(global_state_t* gs)
 {
     for (int code = 0; code < KEY_CNT; ++code)
     {
         if (!wanted_keycode(code)) continue;
         (void)close(gs->key_fds[code]);
     }
+    (void)close(gs->epollfd);
 }
 
 static inline struct timespec ms_to_timespec(uint64_t ms)
