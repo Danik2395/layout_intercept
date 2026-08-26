@@ -22,6 +22,11 @@ static inline void preclassify_key_type(const global_state_t* gs, internal_event
     ev->key_type = gs->key_type_lookup[ev->keycode_raw];
 }
 
+static inline void event_to_q(global_state_t* gs, const internal_event_t* ev)
+{
+    gs->send_q[++gs->q_pos] = *ev;
+}
+
 uint64_t get_time_ms();
 
 internal_event_t event_to_internal(const struct input_event* ev);

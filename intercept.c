@@ -105,23 +105,34 @@ int main(void)
                 (void)read(on_timer_fd, &buff_clean, sizeof(uint64_t));
             }
 
-            if (event.key_type != NORMAL && postclassify_key_type(&gs, &event))
+            int n = 0;
+            do
             {
-                if (event.key_type == LAYER)
+                internal_event_t* send_event = gs.q_pos == -1 ? &event : &gs.send_q[n];
+
+                if (send_event->key_type != NORMAL && postclassify_key_type(&gs, send_event))
                 {
-                    (void)handle_layer_key(&gs, &event);
+                    if (send_event->key_type == LAYER)
+                    {
+                        (void)handle_layer_key(&gs, send_event);
 
-                    finite_event(&gs, &event);
+                        finite_event(&gs, send_event);
 
-                    continue;
+                        continue;
+                    }
+
+                    // ...
                 }
 
-                // ...
+                if (!send_event->remapped)
+                {
+                    (void)remap_key_layout(&gs, send_event);
+                }
+
+                finite_event(&gs, send_event);
             }
-
-            (void)remap_key_layout(&gs, &event);
-
-            finite_event(&gs, &event);
+            while (gs.q_pos != -1 && ++n <= gs.q_pos);
+            gs.q_pos = -1;
         }
     }
 

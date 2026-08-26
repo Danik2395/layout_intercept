@@ -35,6 +35,8 @@ typedef enum
 } keystroke_t;
 
 #define BATCH_SIZE 4
+#define QUEUE_SIZE 16
+
 typedef uint16_t batch_t[BATCH_SIZE];
 
 typedef struct
@@ -50,6 +52,7 @@ typedef struct
         key_batch_t st_keycodes;
         batch_t keycodes;
     };
+    bool remapped;
     layer_t layer;
     keystroke_t keystroke;
     key_type_t key_type;
@@ -86,8 +89,12 @@ typedef struct
 
     int epollfd;
     int key_fds[KEY_CNT];
+
     internal_event_t key_waiting[KEY_CNT];
     pressed_state_t pressed_state[KEY_CNT];
+
+    int q_pos;
+    internal_event_t send_q[QUEUE_SIZE];
 
     th_pending_t th_pending;
     const th_conf_t* th_conf; // size KEY_CNT
