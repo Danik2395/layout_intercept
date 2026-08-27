@@ -33,15 +33,21 @@ static inline uint64_t diff_time(uint64_t t, uint64_t t1)
     return diff > 0 ? diff : -diff;
 }
 
-static inline bool keycodes_equal(const key_batch_t* k, const key_batch_t* k1)
+static inline bool keycodes_equal_ptr(const key_batch_t* k, const key_batch_t* k1)
 {
     return *(uint64_t*)k == *(uint64_t*)k1;
+}
+
+static inline bool keycodes_equal_val(const key_batch_t* k, key_batch_t k1)
+{
+    key_batch_t* k1_ptr = &k1;
+    return keycodes_equal_ptr(k, k1_ptr);
 }
 
 static inline void set_remapped(internal_event_t* ev)
 {
     key_batch_t batch_raw = {ev->keycode_raw};
-    if (!keycodes_equal(&batch_raw, &ev->st_keycodes)) ev->remapped = true;
+    if (!keycodes_equal_ptr(&batch_raw, &ev->st_keycodes)) ev->remapped = true;
 }
 
 uint64_t get_time_ms();
