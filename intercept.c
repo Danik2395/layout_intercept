@@ -126,6 +126,13 @@ int main(void)
                 }
                 // ...
 
+                if (send_event->keystroke == UP)
+                {
+                    send_event->st_keycodes = gs.pressed_state[send_event->keycode_raw].keycodes_sent;
+                    finite_event(&gs, send_event);
+                    continue;
+                }
+
                 if (!is_remapped(send_event))
                 {
                     (void)remap_key_layout(&gs, send_event);
