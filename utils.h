@@ -27,6 +27,23 @@ static inline void event_to_q(global_state_t* gs, const internal_event_t* ev)
     gs->send_q[++gs->q_pos] = *ev;
 }
 
+static inline uint64_t diff_time(uint64_t t, uint64_t t1)
+{
+    uint64_t diff = t - t1;
+    return diff > 0 ? diff : -diff;
+}
+
+static inline bool keycodes_equal(const key_batch_t* k, const key_batch_t* k1)
+{
+    return *(uint64_t*)k == *(uint64_t*)k1;
+}
+
+static inline void set_remapped(internal_event_t* ev)
+{
+    key_batch_t batch_raw = {ev->keycode_raw};
+    if (!keycodes_equal(&batch_raw, &ev->st_keycodes)) ev->remapped = true;
+}
+
 uint64_t get_time_ms();
 
 internal_event_t event_to_internal(const struct input_event* ev);
