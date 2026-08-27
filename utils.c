@@ -45,7 +45,7 @@ void make_key_type_lookup(global_state_t* gs)
 
 int postclassify_key_type(const global_state_t* gs, internal_event_t* ev)
 {
-    if (ev->keycodes[0] <= KEY_MAX) return 0;
+    if (ev->key_type == NORMAL || ev->keycodes[0] <= KEY_MAX) return 0;
 
     if (ev->keycodes[0] & LAYER_BASE)
     {
