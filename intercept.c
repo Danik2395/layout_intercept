@@ -126,7 +126,7 @@ int main(void)
                 }
                 // ...
 
-                if (!send_event->remapped)
+                if (!is_remapped(send_event))
                 {
                     (void)remap_key_layout(&gs, send_event);
                 }

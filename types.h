@@ -52,7 +52,6 @@ typedef struct
         key_batch_t st_keycodes;
         batch_t keycodes;
     };
-    bool remapped;
     layer_t layer;
     keystroke_t keystroke;
     key_type_t key_type;

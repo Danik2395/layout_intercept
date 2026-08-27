@@ -35,7 +35,6 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
                     ev->st_keycodes = gs->th_conf[ev->keycode_raw].hold_keycodes;
                 }
 
-                set_remapped(ev);
             }
             else
             {
@@ -44,7 +43,6 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
                     timer_stop(gs->key_fds[ev->keycode_raw]);
                     thp->active = false;
                     ev->st_keycodes = gs->th_conf[ev->keycode_raw].tap_keycodes;
-                    set_remapped(ev);
 
                     ev->keystroke = DOWN;
                     event_to_q(gs, ev);
@@ -55,7 +53,6 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
                 else
                 {
                     ev->st_keycodes = gs->pressed_state[ev->keycode_raw].keycodes_sent;
-                    set_remapped(ev);
                 }
             }
         }
@@ -66,7 +63,6 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
                 if (diff_t < gs->th_conf[ev->keycode_raw].idle_time)
                 {
                     ev->st_keycodes = gs->th_conf[ev->keycode_raw].tap_keycodes;
-                    set_remapped(ev);
                 }
                 else
                 {
@@ -80,7 +76,6 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
             else
             {
                 ev->st_keycodes = gs->pressed_state[ev->keycode_raw].keycodes_sent;
-                set_remapped(ev);
             }
         }
 
@@ -101,10 +96,7 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
             thp->event.st_keycodes = gs->th_conf[thp->event.keycode_raw].hold_keycodes;
         }
 
-        set_remapped(&thp->event);
         event_to_q(gs, &thp->event);
-
-        set_remapped(ev);
         event_to_q(gs, ev);
 
         return 1;

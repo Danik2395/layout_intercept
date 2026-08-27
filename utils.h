@@ -44,10 +44,11 @@ static inline bool keycodes_equal_val(const key_batch_t* k, key_batch_t k1)
     return keycodes_equal_ptr(k, k1_ptr);
 }
 
-static inline void set_remapped(internal_event_t* ev)
+static inline bool is_remapped(internal_event_t* ev)
 {
     key_batch_t batch_raw = {ev->keycode_raw};
-    if (!keycodes_equal_ptr(&batch_raw, &ev->st_keycodes)) ev->remapped = true;
+    if (keycodes_equal_ptr(&batch_raw, &ev->st_keycodes)) return false;
+    return true;
 }
 
 uint64_t get_time_ms();
