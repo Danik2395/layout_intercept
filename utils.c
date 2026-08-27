@@ -33,13 +33,11 @@ void make_key_type_lookup(global_state_t* gs)
 
     for (int code = 0; code < KEY_CNT; ++code)
     {
-        if (taphold_config[code].configured)
-        {
-            lookup[code] = TAPHOLD;
-        }
+        if      (taphold_config[code].configured) lookup[code] = TAPHOLD;
+        else if (timer_config[code].configured)   lookup[code] = OVERLOAD_TIMER;
+        // ...
     }
 
-    // ...
 }
 
 int postclassify_key_type(const global_state_t* gs, internal_event_t* ev)

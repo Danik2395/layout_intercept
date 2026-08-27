@@ -69,6 +69,14 @@ typedef struct
 
 typedef struct
 {
+    uint64_t hold_time;
+    key_batch_t tap_keycodes;
+    key_batch_t hold_keycodes;
+    bool configured;
+} timer_conf_t;
+
+typedef struct
+{
     bool active;
     key_batch_t keycodes_sent;
     uint64_t time_sent;
@@ -97,6 +105,8 @@ typedef struct
 
     th_pending_t th_pending;
     const th_conf_t* th_conf; // size KEY_CNT
+
+    const timer_conf_t* timer_conf; // size KEY_CNT
 
     layer_t layers_mask;
     const key_batch_t (*layers_conf)[KEY_CNT]; // size LAYERS_MAX_SIZE KEY_CNT

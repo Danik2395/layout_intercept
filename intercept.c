@@ -26,6 +26,7 @@ int main(void)
 
     global_state_t gs = {0};
     gs.th_conf = taphold_config;
+    gs.timer_conf = timer_config;
     gs.layers_conf = layers_config;
 
     make_key_type_lookup(&gs);
