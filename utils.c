@@ -7,7 +7,7 @@
 #include "config.h"
 #include "types.h"
 
-uint64_t get_time_ms()
+uint64_t get_time_ms(void)
 {
     struct timespec time;
 

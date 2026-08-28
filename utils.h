@@ -51,7 +51,7 @@ static inline bool is_remapped(internal_event_t* ev)
     return true;
 }
 
-uint64_t get_time_ms();
+uint64_t get_time_ms(void);
 
 internal_event_t event_to_internal(const struct input_event* ev);
 
