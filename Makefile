@@ -5,7 +5,7 @@ CC     := gcc
 CFLAGS := -O2 -Wall -Wextra -pedantic -Wconversion -Wshadow -Werror
 
 BUILD_DIR := ./bin
-SRCS      := $(wildcard *.c) ./layouts/${LAYOUT}_layout.c
+SRCS      := $(wildcard *.c) layouts/${LAYOUT}_layout.c
 OBJS      := $(patsubst %.c, ${OBJ_DIR}/%.o, ${SRCS})
 
 .PHONY: clean all debug release
@@ -30,7 +30,7 @@ ${EXEC}: ${OBJS}
 	${CC} ${CFLAGS} $^ -o $@
 
 ${OBJ_DIR}/%.o: %.c
-	@mkdir -p ${BIN_DIR} ${OBJ_DIR}
+	@mkdir -p $(dir $@)
 	${CC} ${CFLAGS} $< -c -o $@
 
 clean:
