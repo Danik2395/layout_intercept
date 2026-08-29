@@ -87,7 +87,7 @@ int main(void)
                     continue;
                 }
 
-                if (event.key_type == TAPHOLD || event.key_type == NORMAL && gs.th_pending.active)
+                if (event.key_type == TAPHOLD || (event.key_type == NORMAL && gs.th_pending.active))
                 {
                     if (!implement_tap_hold(&gs, &event)) continue;
                 }

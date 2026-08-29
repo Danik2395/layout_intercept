@@ -6,7 +6,7 @@
 
 static inline bool wanted_keycode(uint16_t code)
 {
-    return (code >= KEY_ESC && code <= KEY_CAPSLOCK || code == KEY_RIGHTALT);
+    return ((code >= KEY_ESC && code <= KEY_CAPSLOCK) || code == KEY_RIGHTALT);
 }
 
 static inline bool wanted_event_mask(const struct input_event* ev)
@@ -46,7 +46,7 @@ static inline bool keycodes_equal_val(const key_batch_t* k, key_batch_t k1)
 
 static inline bool is_remapped(internal_event_t* ev)
 {
-    key_batch_t batch_raw = {ev->keycode_raw};
+    key_batch_t batch_raw = {{ev->keycode_raw}};
     if (keycodes_equal_ptr(&batch_raw, &ev->st_keycodes)) return false;
     return true;
 }

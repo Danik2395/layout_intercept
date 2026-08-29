@@ -5,7 +5,7 @@
 
 int remap_key_layout(const global_state_t* gs, internal_event_t* ev)
 {
-    key_batch_t mapped = {0};
+    key_batch_t mapped = {{0}};
 
     if (is_layer(gs->layers_mask, LAYER_SHIFT_MASK))
     {
