@@ -47,17 +47,17 @@ int main(void)
     int ret = 0;
     while (1)
     {
-        int nfds = epoll_wait(gs.epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
+        int num_fds = epoll_wait(gs.epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
 
-        if (nfds == -1)
+        if (num_fds == -1)
         {
             ret = 1;
             goto freefd;
         }
 
-        for (int n = 0; n < nfds; ++n)
+        for (int fd_idx = 0; fd_idx < num_fds; ++fd_idx)
         {
-            struct epoll_event* epoll_event = &epoll_events[n];
+            struct epoll_event* epoll_event = &epoll_events[fd_idx];
 
             if (epoll_event->data.ptr == (void*)&stdin_marker)
             {
@@ -111,10 +111,10 @@ int main(void)
                 }
             }
 
-            int n = 0;
+            int ev_idx = 0;
             do
             {
-                internal_event_t* send_event = gs.q_pos == -1 ? &event : &gs.send_q[n];
+                internal_event_t* send_event = gs.q_pos == -1 ? &event : &gs.send_q[ev_idx];
 
                 (void)postclassify_key_type(&gs, send_event);
 
@@ -141,7 +141,7 @@ int main(void)
 
                 finite_event(&gs, send_event);
             }
-            while (gs.q_pos != -1 && ++n <= gs.q_pos);
+            while (gs.q_pos != -1 && ++ev_idx <= gs.q_pos);
             gs.q_pos = -1;
         }
     }
