@@ -11,7 +11,7 @@ int remap_key_layer(const global_state_t* gs, internal_event_t* ev)
 
     while (mask > 0)
     {
-        layer_t highest_layer = 1U << (31 - __builtin_clz(mask));
+        layer_t highest_layer = (layer_t)(1U << (31 - __builtin_clz(mask)));
 
         key_batch_t replacement_keycodes = gs->layers_conf[highest_layer][keycode];
 

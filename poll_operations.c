@@ -10,7 +10,7 @@ void make_key_fds(global_state_t* gs)
 {
     for (int code = 0; code < KEY_CNT; ++code)
     {
-        if (!wanted_keycode(code)) continue;
+        if (!wanted_keycode((uint16_t)code)) continue;
 
         int timerfd = timerfd_create(CLOCK_MONOTONIC, 0);
 
@@ -28,7 +28,7 @@ void close_fds(global_state_t* gs)
 {
     for (int code = 0; code < KEY_CNT; ++code)
     {
-        if (!wanted_keycode(code)) continue;
+        if (!wanted_keycode((uint16_t)code)) continue;
         (void)close(gs->key_fds[code]);
     }
     (void)close(gs->epollfd);
@@ -37,8 +37,8 @@ void close_fds(global_state_t* gs)
 static inline struct timespec ms_to_timespec(uint64_t ms)
 {
     struct timespec ts = {
-        .tv_sec = ms / 1000,
-        .tv_nsec = (ms % 1000) * 1000000
+        .tv_sec = (int64_t)ms / (int64_t)1000,
+        .tv_nsec = ((int64_t)ms % (int64_t)1000) * (int64_t)1000000
     };
     return ts;
 }

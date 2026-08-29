@@ -47,7 +47,7 @@ int postclassify_key_type(internal_event_t* ev)
     if (ev->keycodes[0] & LAYER_BASE)
     {
         ev->key_type = LAYER;
-        ev->layer = ev->keycodes[0] - LAYER_BASE;
+        ev->layer = (layer_t)(ev->keycodes[0] - LAYER_BASE);
     }
 
     // ...
