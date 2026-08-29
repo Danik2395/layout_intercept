@@ -116,7 +116,7 @@ int main(void)
             {
                 internal_event_t* send_event = gs.q_pos == -1 ? &event : &gs.send_q[ev_idx];
 
-                (void)postclassify_key_type(&gs, send_event);
+                (void)postclassify_key_type(send_event);
 
                 (void)handle_layer_key(&gs, send_event);
 
