@@ -102,7 +102,7 @@ int main(void)
 
                 int on_timer_fd = gs.key_fds[event.keycode_raw];
 
-                int buff_clean = 0;
+                uint64_t buff_clean = 0;
                 (void)read(on_timer_fd, &buff_clean, sizeof(uint64_t));
 
                 if (event.key_type == TAPHOLD)
