@@ -1,2 +1,4 @@
 /bin/
+/test/__pycache__/
 layout_intercept
+/test/test_intercept
