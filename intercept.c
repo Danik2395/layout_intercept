@@ -28,6 +28,7 @@ int main(void)
     gs.th_conf = taphold_config;
     gs.timer_conf = timer_config;
     gs.layers_conf = layers_config;
+    gs.q_pos = -1;
 
     make_key_type_lookup(&gs);
 
