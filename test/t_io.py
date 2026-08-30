@@ -1,5 +1,4 @@
 from t_types    import BYTES_EV_SIZE, TestUnit, InputEvent
-from printer    import print_error
 from packer     import pack_event, unpack_event
 from subprocess import Popen
 from threading  import Event
@@ -8,10 +7,12 @@ import time
 def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start_time_ms: int) -> None:
     """
     Reads from subprocess to sequence_out.
+
+    Raise:
+        Exception
     """
     if subp.stdout is None:
-        print_error("stdout is None")
-        return
+        raise Exception("suqeunce_reader: stdout is None")
 
     read_some: bool = False
     while not stop_sig.is_set():
@@ -22,8 +23,7 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
         read_some = True
 
         if len(ev_bytes) < BYTES_EV_SIZE:
-            print_error("bad bytes to read from subp")
-            return
+            raise Exception("suqeunce_reader: bad bytes to read from subp")
 
         now_time_ms = int(time.perf_counter() * 1000)
         time_passed_ms: int = now_time_ms - start_time_ms
@@ -33,7 +33,7 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
         seq_out.append(TestUnit(event, time_passed_ms))
 
     if not read_some:
-        print_error("no bytes read from subp")
+        raise Exception("suqeunce_reader: no bytes read from subp")
 
 def write_event(subp: Popen, event: InputEvent) -> None:
     """
@@ -42,8 +42,7 @@ def write_event(subp: Popen, event: InputEvent) -> None:
     ev_bytes: bytes = pack_event(event)
 
     if subp.stdin is None:
-        print_error("stdin is None")
-        return
+        raise Exception("suqeunce_reader: stdin is None")
 
     subp.stdin.write(ev_bytes)
 
@@ -51,10 +50,13 @@ def sequence_writer(subp: Popen, seq: list[TestUnit]) -> None:
     """
     Writes to subprocess from sequence.
     """
-    prev_ev_time_passed_sec: float = 0
-    for unit in seq:
-        time_passed_sec = unit.time_passed_ms / 1000
-        sleep_time: float = time_passed_sec - prev_ev_time_passed_sec
-        time.sleep(sleep_time)
-        write_event(subp, unit.event)
-        prev_ev_time_passed_sec = time_passed_sec
+    try:
+        prev_ev_time_passed_sec: float = 0
+        for unit in seq:
+            time_passed_sec = unit.time_passed_ms / 1000
+            sleep_time: float = time_passed_sec - prev_ev_time_passed_sec
+            time.sleep(sleep_time)
+            write_event(subp, unit.event)
+            prev_ev_time_passed_sec = time_passed_sec
+    except:
+        raise

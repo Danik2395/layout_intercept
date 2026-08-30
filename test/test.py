@@ -1,5 +1,5 @@
 from t_types    import SeqCompare, TestUnit, InputEvent, TIME_DELTA_MS
-from printer    import print_seq_compare, print_test_name, print_seq_name
+from printer    import print_seq_compare, print_test_name, print_seq_name, print_error
 from t_io       import write_event, sequence_reader, sequence_writer
 from printer    import print_error
 from sequence   import logic_sequences
@@ -31,21 +31,26 @@ def compare_sequence(write_seq: list[TestUnit], out_seq: list[TestUnit], target_
 def test_logic(subp: Popen) -> None:
     print_test_name("Logic")
 
-    for seq in logic_sequences:
-        out_seq: list[TestUnit] = []
+    stop_read_sig: Event = Event()
 
-        stop_read_sig: Event = Event()
-        time_start_ms: int = int(time.perf_counter() * 1000)
-        Thread(target=sequence_reader, args=[subp, stop_read_sig, out_seq, time_start_ms]).start()
+    try:
+        for seq in logic_sequences:
+            out_seq: list[TestUnit] = []
 
-        sequence_writer(subp, seq.write_seq)
+            time_start_ms: int = int(time.perf_counter() * 1000)
+            Thread(target=sequence_reader, args=[subp, stop_read_sig, out_seq, time_start_ms]).start()
 
-        time.sleep(1)
+            sequence_writer(subp, seq.write_seq)
 
+            time.sleep(1)
+
+            stop_read_sig.set()
+
+            print_seq_name(seq.name)
+            compare_sequence(seq.write_seq, out_seq, seq.target_seq)
+    except Exception as e:
         stop_read_sig.set()
-
-        print_seq_name(seq.name)
-        compare_sequence(seq.write_seq, out_seq, seq.target_seq)
+        print_error(str(e))
 
 def test_stream(subp: Popen, event_count: int, sleep_ms: int) -> None:
     return
