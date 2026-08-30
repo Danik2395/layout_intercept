@@ -63,7 +63,7 @@ int main(void)
             {
                 if (!(epoll_event->events & EPOLLIN)) continue;
 
-                if (fread(&raw_event, sizeof(raw_event), 1, stdin) != 1) goto freefd;
+                if (read(STDIN_FILENO, &raw_event, sizeof(raw_event)) != sizeof(raw_event)) goto freefd;
 
                 if (!wanted_event_mask(&raw_event))
                 {
@@ -73,7 +73,7 @@ int main(void)
                         continue;
                     }
 
-                    (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
+                    (void)write(STDOUT_FILENO, &raw_event, sizeof(raw_event));
                     continue;
                 }
                 gs.suspend_event = true;

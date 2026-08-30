@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <unistd.h>
 #include <linux/input.h>
 #include "finite_automaton.h"
 #include "types.h"
@@ -37,28 +37,32 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         key_state->time_sent = time;
     }
 
-    struct input_event raw_event = {
-        .type = EV_KEY,
-        .value = ev->keystroke,
-        .time = {0, 0}
-    };
+    struct input_event flush_q[FLUSH_QUEUE_SIZE] = {0};
 
-    struct input_event report_event = {
-        .type = EV_SYN,
-        .code = SYN_REPORT,
-        .value = 0,
-        .time = {0, 0}
-    };
-
-    for (int n = 0; n < BATCH_SIZE; ++n)
+    int flush_ev_cnt = 0;
+    while (flush_ev_cnt < FLUSH_QUEUE_SIZE)
     {
-        uint16_t keycode = ev->keycodes[n];
+        uint16_t keycode = ev->keycodes[flush_ev_cnt];
 
         if (keycode == 0) break;
 
-        raw_event.code = keycode;
+        struct input_event raw_event = {
+            .type = EV_KEY,
+            .code = keycode,
+            .value = ev->keystroke,
+            .time = {0, 0}
+        };
 
-        (void)fwrite(&raw_event, sizeof(raw_event), 1, stdout);
-        (void)fwrite(&report_event, sizeof(report_event), 1, stdout);
+        struct input_event report_event = {
+            .type = EV_SYN,
+            .code = SYN_REPORT,
+            .value = 0,
+            .time = {0, 0}
+        };
+
+        flush_q[flush_ev_cnt++] = raw_event;
+        flush_q[flush_ev_cnt++] = report_event;
     }
+
+    (void)write(STDOUT_FILENO, flush_q, sizeof(struct input_event) * (uint64_t)flush_ev_cnt);
 }

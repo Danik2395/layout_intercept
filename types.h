@@ -36,6 +36,7 @@ typedef enum
 
 #define BATCH_SIZE 4
 #define QUEUE_SIZE 16
+#define FLUSH_QUEUE_SIZE BATCH_SIZE * 2
 
 typedef uint16_t batch_t[BATCH_SIZE];
 
