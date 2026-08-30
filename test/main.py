@@ -1,6 +1,7 @@
 from test       import test_logic, test_stream, test_bad_macro, test_bad_byte
 from subprocess import Popen, PIPE
 import argparse
+import sys
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="layout_intercept tester")
@@ -79,19 +80,26 @@ def main() -> None:
 
     bad_macro_suspend: bool = args.bad_macro_suspend
 
-    subp = Popen([f"{exec}"], stdin=PIPE, stdout=PIPE, bufsize=0)
 
     if run_test_logic:
+        subp = Popen([f"{exec}"], stdin=PIPE, stdout=PIPE, stderr=sys.stderr, bufsize=0)
         test_logic(subp)
+        subp.terminate()
 
     if run_test_stream:
+        subp = Popen([f"{exec}"], stdin=PIPE, stdout=PIPE, stderr=sys.stderr, bufsize=0)
         test_stream(subp, stream_count, stream_sleep, stream_suspend)
+        subp.terminate()
 
     if run_test_bad_macro:
-        test_bad_macro(subp)
+        subp = Popen([f"{exec}"], stdin=PIPE, stdout=PIPE, stderr=sys.stderr, bufsize=0)
+        test_bad_macro(subp, bad_macro_suspend)
+        subp.terminate()
 
     if run_test_bad_byte:
+        subp = Popen([f"{exec}"], stdin=PIPE, stdout=PIPE, stderr=sys.stderr, bufsize=0)
         test_bad_byte(subp)
+        subp.terminate()
 
 if __name__ == "__main__":
     main()

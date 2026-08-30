@@ -44,7 +44,21 @@ logic_sequences: list[LogicSeqUnit] = [
             ),
         ]
 
-# test_bad_macro_seq: list[TestUnit] = [
-#         TestUnit(InputEvent(seconds= , useconds= , type= , code= , value= ),
-#                  ),
-#         ]
+bad_macro_seq: list[TestUnit] = [
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 42, value= 1),
+                 0),
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 42, value= 1),
+                 5),
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 42, value= 1),
+                 10),
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 42, value= 1),
+                 15),
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 97, value= 0),
+                 20),
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 97, value= 0),
+                 25),
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 97, value= 0),
+                 30),
+        TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 97, value= 0),
+                 35),
+        ]

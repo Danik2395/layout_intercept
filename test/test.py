@@ -2,7 +2,7 @@ from t_types    import SeqCompare, TestUnit, InputEvent, TIME_DELTA_MS
 from printer    import print_seq_compare, print_test_name, print_seq_name, print_error, print_event
 from t_io       import write_event, sequence_reader, sequence_writer
 from printer    import print_error
-from sequence   import logic_sequences
+from sequence   import logic_sequences, bad_macro_seq
 from subprocess import Popen
 from threading  import Thread, Event
 import time
@@ -112,7 +112,29 @@ def test_stream(subp: Popen, event_count: int, sleep_ms: int, suspend: bool) -> 
     test_logic(subp)
 
 def test_bad_macro(subp: Popen, suspend: bool) -> None:
-    return
+    print_test_name("Bad Macro")
+
+    stop_read_sig: Event = Event()
+
+    stream_out: list[InputEvent] = []
+
+    try:
+        Thread(target=sequence_reader, args=[subp, stop_read_sig, stream_out]).start()
+
+        sequence_writer(subp, bad_macro_seq)
+
+        time.sleep(1)
+        stop_read_sig.set()
+
+    except Exception as e:
+        stop_read_sig.set()
+        print_error(str(e))
+
+    if not suspend:
+        for ev in stream_out:
+            print_event(ev)
+
+    test_logic(subp)
 
 def test_bad_byte(subp: Popen) -> None:
     return
