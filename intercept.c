@@ -14,6 +14,7 @@
 #include "layout.h"
 #include "layers.h"
 #include "poll_operations.h"
+#include "oneone.h"
 
 int main(void)
 {
@@ -28,6 +29,7 @@ int main(void)
     gs.th_conf = taphold_config;
     gs.timer_conf = timer_config;
     gs.layers_conf = layers_config;
+    gs.oneone_conf = oneone_config;
     gs.q_pos = -1;
 
     make_key_type_lookup(&gs);
@@ -82,6 +84,7 @@ int main(void)
                 event = event_to_internal(&raw_event);
                 preclassify_key_type(&gs, &event);
 
+                if (remap_key_layer(&gs, &event) || remap_key_oneone(&gs, &event))
                 if (remap_key_layer(&gs, &event))
                 {
                     finite_event(&gs, &event);

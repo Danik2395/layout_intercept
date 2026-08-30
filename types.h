@@ -109,6 +109,8 @@ typedef struct
 
     const timer_conf_t* timer_conf; // size KEY_CNT
 
+    const key_batch_t* oneone_conf; // size KEY_CNT
+
     layer_t layers_mask;
     const key_batch_t (*layers_conf)[KEY_CNT]; // size LAYERS_MAX_SIZE KEY_CNT
 
