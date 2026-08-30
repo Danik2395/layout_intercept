@@ -1,4 +1,4 @@
-from test.types import SeqCompare
+from t_types import SeqCompare
 
 def print_test_name(name: str) -> None:
     name_formatted = f"\n\n---\nTest: {name}\n---\n"

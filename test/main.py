@@ -1,6 +1,6 @@
-import argparse
+from test       import test_logic, test_stream, test_bad_macro, test_bad_byte
 from subprocess import Popen, PIPE
-from test.test import test_logic, test_stream, test_bad_macro, test_bad_byte
+import argparse
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="layout_intercept tester")

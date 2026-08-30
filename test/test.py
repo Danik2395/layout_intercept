@@ -1,9 +1,9 @@
-from test.types    import SeqCompare, TestUnit, InputEvent, TIME_DELTA_MS
-from test.printer  import print_seq_compare, print_test_name, print_seq_name
-from test.io       import write_event, sequence_reader, sequence_writer
-from test.sequence import logic_sequences
-from subprocess    import Popen
-from threading     import Thread, Event
+from t_types    import SeqCompare, TestUnit, InputEvent, TIME_DELTA_MS
+from printer    import print_seq_compare, print_test_name, print_seq_name
+from t_io       import write_event, sequence_reader, sequence_writer
+from sequence   import logic_sequences
+from subprocess import Popen
+from threading  import Thread, Event
 import time
 
 def compare_sequence(write_seq: list[TestUnit], out_seq: list[TestUnit], target_seq: list[TestUnit]) -> None:

@@ -1,4 +1,4 @@
-from test.types import InputEvent, BYTES_EV_FMT
+from t_types import InputEvent, BYTES_EV_FMT
 import struct
 
 def pack_event(event: InputEvent) -> bytes:

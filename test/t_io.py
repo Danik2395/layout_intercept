@@ -1,7 +1,7 @@
-from test.types  import BYTES_EV_SIZE, TestUnit, InputEvent
-from test.packer import pack_event, unpack_event
-from subprocess  import Popen
-from threading   import Event
+from t_types    import BYTES_EV_SIZE, TestUnit, InputEvent
+from packer     import pack_event, unpack_event
+from subprocess import Popen
+from threading  import Event
 import time
 
 def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start_time_ms: int) -> None:

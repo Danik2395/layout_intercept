@@ -1,4 +1,4 @@
-from test.types import TestUnit, InputEvent, LogicSeqUnit
+from t_types import TestUnit, InputEvent, LogicSeqUnit
 
 logic_sequences: list[LogicSeqUnit] = [
         LogicSeqUnit(
