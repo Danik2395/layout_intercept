@@ -8,9 +8,10 @@ import time
 
 def compare_sequence(write_seq: list[TestUnit], out_seq: list[TestUnit], target_seq: list[TestUnit]) -> None:
     target_len = len(target_seq)
+    out_len    = len(out_seq)
 
-    if target_len != len(out_seq):
-        print("Not equal length")
+    if target_len != out_len:
+        print(f"Not equal length: target_len = {target_len}, out_len = {out_len}")
         return
 
     for unit_idx in range(target_len):
@@ -34,7 +35,7 @@ def test_logic(subp: Popen) -> None:
 
         stop_read_sig: Event = Event()
         time_start_ms: int = int(time.perf_counter() * 1000)
-        Thread(target=sequence_reader, args=[subp, stop_read_sig, out_seq, time_start_ms])
+        Thread(target=sequence_reader, args=[subp, stop_read_sig, out_seq, time_start_ms]).start()
 
         sequence_writer(subp, seq.write_seq)
 

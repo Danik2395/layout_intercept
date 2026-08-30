@@ -8,12 +8,18 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
     """
     Reads from subprocess to sequence_out.
     """
-    if subp.stdout is None: return
+    if subp.stdout is None:
+        print("stdout is None")
+        return
 
+    read_some: bool = False
     while not stop_sig.is_set():
         ev_bytes: bytes = subp.stdout.read(BYTES_EV_SIZE)
+        read_some = True
 
-        if len(ev_bytes) < BYTES_EV_SIZE: return
+        if len(ev_bytes) < BYTES_EV_SIZE:
+            print("bad bytes to read from subp")
+            return
 
         now_time_ms = int(time.perf_counter() * 1000)
         time_passed_ms: int = now_time_ms - start_time_ms
@@ -22,13 +28,18 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
 
         seq_out.append(TestUnit(event, time_passed_ms))
 
+    if not read_some:
+        print("no bytes read from subp")
+
 def write_event(subp: Popen, event: InputEvent) -> None:
     """
     Write single event to subprocess.
     """
     ev_bytes: bytes = pack_event(event)
 
-    if subp.stdin is None: return
+    if subp.stdin is None:
+        print("stdin is None")
+        return
 
     subp.stdin.write(ev_bytes)
 
