@@ -16,6 +16,9 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
     read_some: bool = False
     while not stop_sig.is_set():
         ev_bytes: bytes = subp.stdout.read(BYTES_EV_SIZE)
+
+        if not ev_bytes: continue
+
         read_some = True
 
         if len(ev_bytes) < BYTES_EV_SIZE:

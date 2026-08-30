@@ -40,6 +40,8 @@ def test_logic(subp: Popen) -> None:
 
         sequence_writer(subp, seq.write_seq)
 
+        time.sleep(1)
+
         stop_read_sig.set()
 
         print_seq_name(seq.name)
