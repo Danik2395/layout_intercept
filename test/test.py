@@ -14,15 +14,15 @@ def compare_sequence(write_seq: list[TestUnit], out_seq: list[TestUnit], target_
         return
 
     for unit_idx in range(target_len):
-        write_event  = write_seq[unit_idx].event
-        out_event    = out_seq[unit_idx].event
-        target_event = target_seq[unit_idx].event
+        write_unit  = write_seq[unit_idx]
+        out_unit    = out_seq[unit_idx]
+        target_unit = target_seq[unit_idx]
 
-        code_pass : bool = out_seq[unit_idx].event.code  == target_seq[unit_idx].event.code
-        value_pass: bool = out_seq[unit_idx].event.value == target_seq[unit_idx].event.value
-        time_pass : bool = abs(out_seq[unit_idx].time_passed_ms - target_seq[unit_idx].time_passed_ms) < TIME_DELTA_MS
+        code_pass : bool = out_unit.event.code  == target_unit.event.code
+        value_pass: bool = out_unit.event.value == target_unit.event.value
+        time_pass : bool = abs(out_unit.time_passed_ms - target_unit.time_passed_ms) < TIME_DELTA_MS
 
-        seq_compare: SeqCompare = SeqCompare(write_event, out_event, target_event, code_pass, value_pass, time_pass)
+        seq_compare: SeqCompare = SeqCompare(write_unit, out_unit, target_unit, code_pass, value_pass, time_pass)
 
         print_seq_compare(seq_compare)
 

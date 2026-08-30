@@ -54,9 +54,9 @@ class SeqCompare:
         code_pass: bool
         time_pass: bool
     """
-    send      : InputEvent
-    received  : InputEvent
-    target    : InputEvent
+    send      : TestUnit
+    received  : TestUnit
+    target    : TestUnit
     code_pass : bool
     value_pass: bool
     time_pass : bool
