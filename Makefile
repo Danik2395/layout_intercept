@@ -8,9 +8,15 @@ BUILD_DIR := ./bin
 SRCS      := $(wildcard *.c) layouts/${LAYOUT}_layout.c
 OBJS      := $(patsubst %.c, ${OBJ_DIR}/%.o, ${SRCS})
 
-.PHONY: clean all debug release
+.PHONY: clean all debug release test testall
 
 all: debug
+
+testall: TFLAGS := --all --stream_suspend --bad_macro_suspend
+testall: test
+
+test: debug
+	python test/main.py --path ${BUILD_DIR}/${NAME}-test --logic ${TFLAGS}
 
 debug:   CFLAGS  += -fsanitize=address,undefined -g
 debug:   EXEC    := ${BUILD_DIR}/${NAME}-test
