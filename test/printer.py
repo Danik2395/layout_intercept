@@ -1,4 +1,8 @@
-from t_types import SeqCompare
+from t_types import SeqCompare, RED, GREEN, RESET
+
+def print_error(err: str) -> None:
+     print(f"\n{RED}{err}{RESET}\n")
+
 
 def print_test_name(name: str) -> None:
     name_formatted = f"\n\n---\nTest: {name}\n---\n"
@@ -12,10 +16,6 @@ def print_seq_compare(seq_comp: SeqCompare) -> None:
     send_unit     = seq_comp.send
     received_unit = seq_comp.received
     target_unit   = seq_comp.target
-
-    GREEN = "\033[92m"
-    RED   = "\033[91m"
-    RESET = "\033[0m"
 
     w_label = 8
     w_col   = 10

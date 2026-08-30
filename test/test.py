@@ -1,6 +1,7 @@
 from t_types    import SeqCompare, TestUnit, InputEvent, TIME_DELTA_MS
 from printer    import print_seq_compare, print_test_name, print_seq_name
 from t_io       import write_event, sequence_reader, sequence_writer
+from printer    import print_error
 from sequence   import logic_sequences
 from subprocess import Popen
 from threading  import Thread, Event
@@ -11,7 +12,7 @@ def compare_sequence(write_seq: list[TestUnit], out_seq: list[TestUnit], target_
     out_len    = len(out_seq)
 
     if target_len != out_len:
-        print(f"Not equal length: target_len = {target_len}, out_len = {out_len}")
+        print_error(f"Not equal length: target_len = {target_len}, out_len = {out_len}")
         return
 
     for unit_idx in range(target_len):

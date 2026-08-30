@@ -6,6 +6,11 @@ BYTES_EV_SIZE: int = struct.calcsize(BYTES_EV_FMT)
 
 TIME_DELTA_MS = 15
 
+GREEN = "\033[92m"
+RED   = "\033[91m"
+RESET = "\033[0m"
+
+
 @dataclass
 class InputEvent:
     """
