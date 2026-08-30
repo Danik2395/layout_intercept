@@ -15,7 +15,7 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
 
         if len(ev_bytes) < BYTES_EV_SIZE: return
 
-        now_time_ms = int(time.time() * 1000)
+        now_time_ms = int(time.perf_counter() * 1000)
         time_passed_ms: int = now_time_ms - start_time_ms
 
         event: InputEvent = unpack_event(ev_bytes)

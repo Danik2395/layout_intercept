@@ -30,10 +30,10 @@ def test_logic(subp: Popen) -> None:
     print_test_name("Logic")
 
     for seq in logic_sequences:
-        time_start_ms: int = int(time.time() * 1000)
         out_seq: list[TestUnit] = []
 
         stop_read_sig: Event = Event()
+        time_start_ms: int = int(time.perf_counter() * 1000)
         Thread(target=sequence_reader, args=[subp, stop_read_sig, out_seq, time_start_ms])
 
         sequence_writer(subp, seq.write_seq)
