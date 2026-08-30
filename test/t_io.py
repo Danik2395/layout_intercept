@@ -14,6 +14,8 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
     if subp.stdout is None:
         raise Exception("suqeunce_reader: stdout is None")
 
+    os.set_blocking(subp.stdout.fileno(), False)
+
     read_some: bool = False
     while not stop_sig.is_set():
         ev_bytes: bytes = subp.stdout.read(BYTES_EV_SIZE)
@@ -31,6 +33,8 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit], start
         event: InputEvent = unpack_event(ev_bytes)
 
         seq_out.append(TestUnit(event, time_passed_ms))
+
+    os.set_blocking(subp.stdout.fileno(), True)
 
     if not read_some:
         raise Exception("suqeunce_reader: no bytes read from subp")

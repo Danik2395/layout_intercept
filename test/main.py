@@ -1,7 +1,6 @@
 from test       import test_logic, test_stream, test_bad_macro, test_bad_byte
 from subprocess import Popen, PIPE
 import argparse
-import os
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="layout_intercept tester")
@@ -68,10 +67,6 @@ def main() -> None:
     stream_count: int = args.stream_count
 
     subp = Popen([f"{exec}"], stdin=PIPE, stdout=PIPE, bufsize=0)
-
-    if not subp.stdout or not subp.stdin: return
-
-    os.set_blocking(subp.stdout.fileno(), False)
 
     if run_test_logic:
         test_logic(subp)
