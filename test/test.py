@@ -76,7 +76,7 @@ def random_event_tuple() -> list[InputEvent]:
 
     return events
 
-def test_stream(subp: Popen, event_count: int, sleep_ms: int) -> None:
+def test_stream(subp: Popen, event_count: int, sleep_ms: int, suspend: bool) -> None:
     print_test_name("Stream")
 
     sleep_sec: int = int(sleep_ms / 1000)
@@ -105,12 +105,13 @@ def test_stream(subp: Popen, event_count: int, sleep_ms: int) -> None:
         print_error(str(e))
         return
 
-    for ev in stream_out:
-        print_event(ev)
+    if not suspend:
+        for ev in stream_out:
+            print_event(ev)
 
     test_logic(subp)
 
-def test_bad_macro(subp: Popen) -> None:
+def test_bad_macro(subp: Popen, suspend: bool) -> None:
     return
 
 def test_bad_byte(subp: Popen) -> None:

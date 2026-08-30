@@ -35,11 +35,21 @@ def main() -> None:
             default=80,
             help="How much to sleep in stream test."
             )
+    parser.add_argument(
+            "--stream_suspend",
+            action='store_true',
+            help="Don't show random events."
+            )
 
     parser.add_argument(
             "--bad_macro",
             action='store_true',
             help="Test bad sequence of input."
+            )
+    parser.add_argument(
+            "--bad_macro_suspend",
+            action='store_true',
+            help="Don't show macro events."
             )
 
     parser.add_argument(
@@ -63,8 +73,11 @@ def main() -> None:
     run_test_bad_macro: bool = True if args.all else args.bad_macro
     run_test_bad_byte : bool = True if args.all else args.bad_byte
 
-    stream_sleep: int = args.stream_sleep
-    stream_count: int = args.stream_count
+    stream_sleep  : int = args.stream_sleep
+    stream_count  : int = args.stream_count
+    stream_suspend: bool = args.stream_suspend
+
+    bad_macro_suspend: bool = args.bad_macro_suspend
 
     subp = Popen([f"{exec}"], stdin=PIPE, stdout=PIPE, bufsize=0)
 
@@ -72,7 +85,7 @@ def main() -> None:
         test_logic(subp)
 
     if run_test_stream:
-        test_stream(subp, stream_count, stream_sleep)
+        test_stream(subp, stream_count, stream_sleep, stream_suspend)
 
     if run_test_bad_macro:
         test_bad_macro(subp)
