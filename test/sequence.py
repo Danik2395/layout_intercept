@@ -43,7 +43,7 @@ logic_sequences: list[LogicSeqUnit] = [
                 ]
             ),
         LogicSeqUnit(
-            name= "th key tap",
+            name= "1. th key tap",
             write_seq= [
                 TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
                          0),
@@ -68,7 +68,7 @@ logic_sequences: list[LogicSeqUnit] = [
                 ]
             ),
         LogicSeqUnit(
-                name= "key tap",
+                name= "2. key tap",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 35, value= 1),
                              0),
@@ -93,7 +93,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "resolv th to hold with normal key",
+                name= "3. resolv th to hold with normal key",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
                              0),
@@ -138,7 +138,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "th key hold",
+                name= "4. th key hold",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
                              0),
@@ -183,7 +183,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "fast typing",
+                name= "5. fast typing",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 35, value= 1),
                              0),
@@ -228,7 +228,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "resolv th to hold with th key",
+                name= "6. resolv th to hold with th key",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
                              0),
@@ -273,7 +273,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "double tap th key to repeat th.tap",
+                name= "7. double tap th key to repeat th.tap",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
                              0),
@@ -318,7 +318,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "resolv timer key to tap",
+                name= "8. resolv timer key to tap",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 15, value= 1),
                              0),
@@ -343,7 +343,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "resolv timer key to hold",
+                name= "9. resolv timer key to hold",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 15, value= 1),
                              0),
@@ -368,7 +368,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "alt alt test",
+                name= "10. alt alt test",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 56, value= 1),
                              0),
@@ -423,7 +423,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
             ),
         LogicSeqUnit(
-                name= "oneone test",
+                name= "11. oneone test",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 100, value= 1),
                              0),

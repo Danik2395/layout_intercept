@@ -1,5 +1,6 @@
-from t_types    import BYTES_EV_SIZE, TestUnit, InputEvent
+from t_types    import BYTES_EV_SIZE, TestUnit, InputEvent, TimeStart
 from packer     import pack_event, unpack_event
+from printer    import print_error
 from subprocess import Popen
 from threading  import Event
 import time
@@ -22,7 +23,7 @@ def read_event(subp: Popen) -> InputEvent:
 
     return unpack_event(ev_bytes)
 
-def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit] | list[InputEvent], start_time_ms: int | None = None) -> None:
+def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit] | list[InputEvent], start_time_ms: TimeStart | None = None) -> None:
     """
     Reads from subprocess to sequence_out.
 
@@ -38,7 +39,7 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit] | list
     while not stop_sig.is_set():
         ev_bytes: bytes = subp.stdout.read(BYTES_EV_SIZE)
 
-        if not ev_bytes: continue
+        if ev_bytes is None: continue
 
         read_some = True
 
@@ -50,7 +51,7 @@ def sequence_reader(subp: Popen, stop_sig: Event, seq_out: list[TestUnit] | list
 
         if start_time_ms is not None:
             now_time_ms = int(time.perf_counter() * 1000)
-            time_passed_ms: int = now_time_ms - start_time_ms
+            time_passed_ms: int = now_time_ms - start_time_ms.time_start_ms
 
             seq_out.append(TestUnit(event, time_passed_ms))
         else:
