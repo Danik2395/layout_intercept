@@ -1,9 +1,11 @@
 #include "overload_timer.h"
 #include "utils.h"
 #include "poll_operations.h"
+#include "debug.h"
 
 int implement_overload_timer(global_state_t* gs, internal_event_t* ev)
 {
+    debug("timer");
     if (ev->keystroke == DOWN)
     {
         ev->st_keycodes = gs->timer_conf[ev->keycode_raw].hold_keycodes;

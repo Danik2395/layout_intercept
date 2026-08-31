@@ -2,6 +2,7 @@
 #include "types.h"
 #include "utils.h"
 #include "poll_operations.h"
+#include "debug.h"
 
 static inline void swap_events(internal_event_t* ev, internal_event_t* ev1)
 {
@@ -13,6 +14,9 @@ static inline void swap_events(internal_event_t* ev, internal_event_t* ev1)
 int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
 {
     uint64_t diff_t = diff_time(gs->prev_key_time_ms, ev->key_time_ms);
+    debug_val("tap-hold prev_time", "%lu", gs->prev_key_time_ms);
+    debug_val("tap-hold  key_time", "%lu", ev->key_time_ms);
+    debug_val("tap-hold  iff_time", "%lu", diff_t);
     th_pending_t* thp = &gs->th_pending;
 
     if (ev->key_type == TAPHOLD)

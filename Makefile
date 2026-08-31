@@ -12,13 +12,13 @@ OBJS      := $(patsubst %.c, ${OBJ_DIR}/%.o, ${SRCS})
 
 all: debug
 
-testall: TFLAGS := --all --stream_suspend --bad_macro_suspend
+testall: TFLAGS := --all --stream_suspend --bad_macro_suspend --stream_count 100000 --stream_sleep 1
 testall: test
 
 test: debug
 	python test/main.py --path ${BUILD_DIR}/${NAME}-test --logic ${TFLAGS}
 
-debug:   CFLAGS  += -fsanitize=address,undefined -g
+debug:   CFLAGS  += -fsanitize=address,undefined -g -D DEBUG
 debug:   EXEC    := ${BUILD_DIR}/${NAME}-test
 debug:   OBJ_DIR := ${BUILD_DIR}/debug
 debug:   build

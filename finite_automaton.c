@@ -3,6 +3,7 @@
 #include "finite_automaton.h"
 #include "types.h"
 #include "utils.h"
+#include "debug.h"
 
 void finite_event(global_state_t* gs, const internal_event_t* ev)
 {
@@ -37,12 +38,17 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         key_state->time_sent = time;
     }
 
+    debug("6. finite");
+    debug_val("keycode[0]", "%d", ev->keycodes[0]);
+    debug_val("keycode[1]", "%d", ev->keycodes[1]);
+
     struct input_event flush_q[FLUSH_QUEUE_SIZE] = {0};
 
     int flush_ev_cnt = 0;
     int kc_idx = 0;
     while (kc_idx < BATCH_SIZE)
     {
+        debug_val("7. batch idx", "%d", ev->keycodes[kc_idx]);
         uint16_t keycode = ev->keycodes[kc_idx++];
 
         if (keycode == 0) break;
@@ -65,5 +71,6 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         flush_q[flush_ev_cnt++] = report_event;
     }
 
+    debug_val("8. flush", "%d\n", flush_ev_cnt);
     (void)write(STDOUT_FILENO, flush_q, sizeof(struct input_event) * (uint64_t)flush_ev_cnt);
 }

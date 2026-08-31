@@ -3,6 +3,7 @@
 #include "layers.h"
 #include "types.h"
 #include "utils.h"
+#include "debug.h"
 
 int remap_key_layer(const global_state_t* gs, internal_event_t* ev)
 {
@@ -29,6 +30,7 @@ int remap_key_layer(const global_state_t* gs, internal_event_t* ev)
 
 int handle_layer_key(global_state_t* gs, const internal_event_t* ev)
 {
+    debug("handle_layer");
     layer_t layer = ev->layer;
     layer_t layer_to_toggle = 0;
 
