@@ -29,8 +29,7 @@ static inline void event_to_q(global_state_t* gs, const internal_event_t* ev)
 
 static inline uint64_t diff_time(uint64_t t, uint64_t t1)
 {
-    uint64_t diff = t - t1;
-    return diff > 0 ? diff : -diff;
+    return t > t1 ? t - t1 : t1 - t;
 }
 
 static inline bool keycodes_equal_ptr(const key_batch_t* k, const key_batch_t* k1)
