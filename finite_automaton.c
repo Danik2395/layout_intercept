@@ -40,9 +40,10 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
     struct input_event flush_q[FLUSH_QUEUE_SIZE] = {0};
 
     int flush_ev_cnt = 0;
-    while (flush_ev_cnt < FLUSH_QUEUE_SIZE)
+    int kc_idx = 0;
+    while (kc_idx < BATCH_SIZE)
     {
-        uint16_t keycode = ev->keycodes[flush_ev_cnt];
+        uint16_t keycode = ev->keycodes[kc_idx++];
 
         if (keycode == 0) break;
 
