@@ -40,6 +40,12 @@ const timer_conf_t timer_config[KEY_CNT] = {
         .tap_keycodes  = {{KEY_TAB}},
         .hold_keycodes = {{KEY_ESC}},
         .configured    = true,
+    },
+    [KEY_CAPSLOCK] = {
+        .hold_time     = 150,
+        .tap_keycodes  = {{KEY_CAPSLOCK}},
+        .hold_keycodes = {{LAYER_BASE | LAYER_NAV_MASK}},
+        .configured    = true,
     }
 };
 
