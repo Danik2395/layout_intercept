@@ -15,6 +15,7 @@
 #include "layers.h"
 #include "poll_operations.h"
 #include "oneone.h"
+#include "debug.h"
 
 int main(void)
 {
@@ -51,6 +52,7 @@ int main(void)
     while (1)
     {
         int num_fds = epoll_wait(gs.epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
+        debug("1. after epoll");
 
         if (num_fds == -1)
         {
@@ -72,6 +74,7 @@ int main(void)
                 {
                     if (gs.suspend_event && raw_event.type == EV_SYN)
                     {
+                        debug("suspend_event");
                         gs.suspend_event = false;
                         continue;
                     }
@@ -84,12 +87,18 @@ int main(void)
                 event = event_to_internal(&raw_event);
                 preclassify_key_type(&gs, &event);
 
+                debug("2. after event_to_internal");
+                debug_val("keycode", "%d", event.keycodes[0]);
+                debug_val("value  ", "%d", event.keystroke);
+                debug_val("type   ", "%d", event.key_type);
+
                 if (remap_key_layer(&gs, &event) || remap_key_oneone(&gs, &event))
-                if (remap_key_layer(&gs, &event))
                 {
                     finite_event(&gs, &event);
                     continue;
                 }
+
+                debug_val("3. key_type before implement", "%d", event.key_type);
 
                 if (event.key_type == TAPHOLD || (event.key_type == NORMAL && gs.th_pending.active))
                 {
@@ -103,6 +112,7 @@ int main(void)
             else // On timer interrupt
             {
                 event = *(internal_event_t*)epoll_event->data.ptr; // From key_waiting
+                debug_val("on timer interupt. keycode", "%d", event.keycodes[0]);
 
                 int on_timer_fd = gs.key_fds[event.keycode_raw];
 
@@ -119,6 +129,7 @@ int main(void)
             do
             {
                 internal_event_t* send_event = gs.q_pos == -1 ? &event : &gs.send_q[ev_idx];
+                debug_val("4. q_pos", "%d", gs.q_pos);
 
                 (void)postclassify_key_type(send_event);
 
@@ -126,6 +137,7 @@ int main(void)
 
                 if (send_event->key_type == LAYER)
                 {
+                    debug("main send layer");
                     finite_event(&gs, send_event);
                     continue;
                 }
@@ -133,6 +145,7 @@ int main(void)
 
                 if (send_event->keystroke == UP)
                 {
+                    debug("main send up");
                     send_event->st_keycodes = gs.pressed_state[send_event->keycode_raw].keycodes_sent;
                     finite_event(&gs, send_event);
                     continue;
@@ -140,6 +153,7 @@ int main(void)
 
                 if (!is_remapped(send_event))
                 {
+                    debug_val("5. not remapped key", "%d", send_event->keycodes[0]);
                     (void)remap_key_layout(&gs, send_event);
                 }
 
@@ -151,6 +165,7 @@ int main(void)
     }
 
 freefd:
+    debug("freefd");
     close_fds(&gs);
     return ret;
 }

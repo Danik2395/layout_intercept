@@ -6,6 +6,7 @@
 #include "utils.h"
 #include "config.h"
 #include "types.h"
+#include "debug.h"
 
 uint64_t get_time_ms(void)
 {
@@ -42,6 +43,7 @@ void make_key_type_lookup(global_state_t* gs)
 
 int postclassify_key_type(internal_event_t* ev)
 {
+    debug("postclassify");
     if (ev->key_type == NORMAL || ev->keycodes[0] <= KEY_MAX) return 0;
 
     if (ev->keycodes[0] & LAYER_BASE)

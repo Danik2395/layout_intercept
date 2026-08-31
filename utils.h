@@ -3,6 +3,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include "types.h"
+#include "debug.h"
 
 static inline bool wanted_keycode(uint16_t code)
 {
