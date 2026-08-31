@@ -65,3 +65,7 @@ class SeqCompare:
     code_pass : bool
     value_pass: bool
     time_pass : bool
+
+class TimeStart:
+    def __init__(self) -> None:
+        self.time_start_ms: int

@@ -1,4 +1,4 @@
-from t_types    import SeqCompare, TestUnit, InputEvent, TIME_DELTA_MS
+from t_types    import SeqCompare, TestUnit, InputEvent, TIME_DELTA_MS, TimeStart
 from printer    import print_seq_compare, print_test_name, print_seq_name, print_error, print_event
 from t_io       import write_event, sequence_reader, sequence_writer
 from printer    import print_error
@@ -9,6 +9,7 @@ import time
 import random
 
 def compare_sequence(write_seq: list[TestUnit], out_seq: list[TestUnit], target_seq: list[TestUnit]) -> None:
+    write_len  = len(write_seq)
     target_len = len(target_seq)
     out_len    = len(out_seq)
 
@@ -17,7 +18,10 @@ def compare_sequence(write_seq: list[TestUnit], out_seq: list[TestUnit], target_
         return
 
     for unit_idx in range(target_len):
-        write_unit  = write_seq[unit_idx]
+        if unit_idx < write_len:
+            write_unit = write_seq[unit_idx]
+        else:
+            write_unit = TestUnit(InputEvent(0, 0, 0, 0, 0), 0)
         out_unit    = out_seq[unit_idx]
         target_unit = target_seq[unit_idx]
 
@@ -35,23 +39,26 @@ def test_logic(subp: Popen) -> None:
     stop_read_sig: Event = Event()
 
     try:
-        for seq in logic_sequences:
-            out_seq: list[TestUnit] = []
+        time_start_ms: TimeStart = TimeStart()
+        out_seq: list[TestUnit] = []
 
-            time_start_ms: int = int(time.perf_counter() * 1000)
-            Thread(target=sequence_reader, args=[subp, stop_read_sig, out_seq, time_start_ms]).start()
+        Thread(target=sequence_reader, args=[subp, stop_read_sig, out_seq, time_start_ms]).start()
+        for seq in logic_sequences:
+            # stop_read_sig.clear()
+
+            time_start_ms.time_start_ms = int(time.perf_counter() * 1000)
+            out_seq.clear()
 
             sequence_writer(subp, seq.write_seq)
-
-            time.sleep(1)
-
-            stop_read_sig.set()
+            time.sleep(0.2)
 
             print_seq_name(seq.name)
             compare_sequence(seq.write_seq, out_seq, seq.target_seq)
     except Exception as e:
         stop_read_sig.set()
         print_error(str(e))
+
+    stop_read_sig.set()
 
 def get_time_for_ev() -> tuple[int, int]:
     t: float = time.time()
