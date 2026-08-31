@@ -1,7 +1,7 @@
 idle    = 100
 hold    = 200
-th_key  = a, shift
-th_key2 = s, ctrl
+th_key  = a, shift (remap to n)
+th_key2 = s, ctrl  (remap to r)
 key     = h
 
 hold    = 125
@@ -39,7 +39,7 @@ key_dw     key_up     th_key_dw  th_key_up | h_dw     h_up     a_dw     a_up
 
 6. resolv th to hold with th key
 th_key_dw  th_key2_dw ty_key2_up ty_key_up | shift_dw s_dw     s_up     shift_up
-0          25         50         75        | 25       25       50       75
+0          25         50         75        | 25       50       50       75
 
 7. double tap th key to repeat th.tap
 th_key_dw  th_key_up  th_key_dw  th_key_up | a_dw     a_up     a_dw     a_up

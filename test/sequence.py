@@ -257,9 +257,9 @@ logic_sequences: list[LogicSeqUnit] = [
                              25),
 
                     TestUnit(InputEvent(seconds= 0, useconds= 25000, ev_type= 1, code= 19, value= 1),
-                             25),
+                             50),
                     TestUnit(InputEvent(seconds= 0, useconds= 35000, ev_type= 0, code= 0, value= 0),
-                             25),
+                             50),
 
                     TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 19, value= 0),
                              50),
@@ -311,7 +311,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     TestUnit(InputEvent(seconds= 0, useconds= 60000, ev_type= 0, code= 0, value= 0),
                              50),
 
-                    TestUnit(InputEvent(seconds= 0, useconds= 490000, ev_type= 1, code= 30, value= 0),
+                    TestUnit(InputEvent(seconds= 0, useconds= 490000, ev_type= 1, code= 49, value= 0),
                              300),
                     TestUnit(InputEvent(seconds= 0, useconds= 310000, ev_type= 0, code= 0, value= 0),
                              300),
