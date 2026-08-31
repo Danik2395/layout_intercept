@@ -34,7 +34,7 @@ def main() -> None:
             "--stream_sleep",
             type=int,
             default=80,
-            help="How much to sleep in stream test."
+            help="How much to sleep in stream test in ms."
             )
     parser.add_argument(
             "--stream_suspend",
