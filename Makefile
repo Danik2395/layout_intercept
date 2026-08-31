@@ -23,7 +23,7 @@ debug:   EXEC    := ${BUILD_DIR}/${NAME}-test
 debug:   OBJ_DIR := ${BUILD_DIR}/debug
 debug:   build
 
-release: EXEC    := ./${NAME}
+release: EXEC    := /usr/local/bin/${NAME}
 release: OBJ_DIR := ${BUILD_DIR}/release
 release: build
 
