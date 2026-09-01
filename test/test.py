@@ -50,7 +50,7 @@ def test_logic(subp: Popen) -> None:
             out_seq.clear()
 
             sequence_writer(subp, seq.write_seq)
-            time.sleep(0.2)
+            time.sleep(0.3)
 
             print_seq_name(seq.name)
             compare_sequence(seq.write_seq, out_seq, seq.target_seq)
