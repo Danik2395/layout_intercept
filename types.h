@@ -91,6 +91,8 @@ typedef struct
     internal_event_t event;
 } th_pending_t;
 
+#define THP_SIZE 2
+
 typedef struct
 {
     uint64_t prev_key_time_ms;
@@ -105,7 +107,7 @@ typedef struct
     int q_pos;
     internal_event_t send_q[QUEUE_SIZE];
 
-    th_pending_t th_pending;
+    th_pending_t th_pending[THP_SIZE];
     const th_conf_t* th_conf; // size KEY_CNT
 
     const timer_conf_t* timer_conf; // size KEY_CNT
