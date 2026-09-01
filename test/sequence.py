@@ -228,7 +228,52 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "6. resolv th to hold with th key",
+                name= "6. fast typing with th only",
+                write_seq= [
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
+                             0),
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 0, code= 0, value= 0),
+                             0),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 25000, ev_type= 1, code= 31, value= 1),
+                             25),
+                    TestUnit(InputEvent(seconds= 0, useconds= 25000, ev_type= 0, code= 0, value= 0),
+                             25),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 30, value= 0),
+                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
+                             50),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 75000, ev_type= 1, code= 31, value= 0),
+                             75),
+                    TestUnit(InputEvent(seconds= 0, useconds= 75000, ev_type= 0, code= 0, value= 0),
+                             75),
+                    ],
+                target_seq = [
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 49, value= 1),
+                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
+                             50),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 19, value= 1),
+                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
+                             50),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 49, value= 0),
+                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
+                             50),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 75000, ev_type= 1, code= 19, value= 0),
+                             75),
+                    TestUnit(InputEvent(seconds= 0, useconds= 75000, ev_type= 0, code= 0, value= 0),
+                             75),
+                    ]
+                ),
+        LogicSeqUnit(
+                name= "7. resolv th to hold with th key",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
                              0),
@@ -251,14 +296,14 @@ logic_sequences: list[LogicSeqUnit] = [
                              75),
                     ],
                 target_seq = [
-                    TestUnit(InputEvent(seconds= 0, useconds= 25000, ev_type= 1, code= 42, value= 1),
-                             25),
-                    TestUnit(InputEvent(seconds= 0, useconds= 25000, ev_type= 0, code= 0, value= 0),
-                             25),
-
-                    TestUnit(InputEvent(seconds= 0, useconds= 25000, ev_type= 1, code= 19, value= 1),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 42, value= 1),
                              50),
-                    TestUnit(InputEvent(seconds= 0, useconds= 25000, ev_type= 0, code= 0, value= 0),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
+                             50),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 19, value= 1),
+                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
                              50),
 
                     TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 19, value= 0),
@@ -273,7 +318,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "7. double tap th key to repeat th.tap",
+                name= "8. double tap th key to repeat th.tap",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
                              0),
@@ -318,7 +363,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "8. resolv timer key to tap",
+                name= "9. resolv timer key to tap",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 15, value= 1),
                              0),
@@ -343,7 +388,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "9. resolv timer key to hold",
+                name= "10. resolv timer key to hold",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 15, value= 1),
                              0),
@@ -368,7 +413,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "10. alt alt test",
+                name= "11. alt alt test",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 56, value= 1),
                              0),
@@ -423,7 +468,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
             ),
         LogicSeqUnit(
-                name= "11. oneone test",
+                name= "12. oneone test",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 100, value= 1),
                              0),
@@ -448,7 +493,7 @@ logic_sequences: list[LogicSeqUnit] = [
                     ]
                 ),
         LogicSeqUnit(
-                name= "12. nav test",
+                name= "13. nav test",
                 write_seq= [
                     TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 58, value= 1),
                              0),
