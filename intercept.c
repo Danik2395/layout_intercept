@@ -132,8 +132,11 @@ int main(void)
                 debug_val("4. q_pos", "%d", gs.q_pos);
 
                 (void)postclassify_key_type(send_event);
+                debug_val("type", "%d", send_event->key_type);
+                debug_val("layers_mask before", "%d", gs.layers_mask);
 
                 (void)handle_layer_key(&gs, send_event);
+                debug_val("layers_mask after_1", "%d", gs.layers_mask);
 
                 if (send_event->key_type == LAYER)
                 {
@@ -147,6 +150,7 @@ int main(void)
                 {
                     debug("main send up");
                     send_event->st_keycodes = gs.pressed_state[send_event->keycode_raw].keycodes_sent;
+                    debug_val("layers_mask after_2", "%d", gs.layers_mask);
                     finite_event(&gs, send_event);
                     continue;
                 }

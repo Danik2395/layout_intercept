@@ -7,6 +7,7 @@
 
 void finite_event(global_state_t* gs, const internal_event_t* ev)
 {
+    debug("6. finite");
     uint64_t time = get_time_ms();
     gs->prev_key_time_ms = time;
 
@@ -17,6 +18,7 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
 
     if (ev->key_type > LAST_TO_SEND_KEY_TYPE)
     {
+        debug("in last to send");
         if (!key_active) return;
 
         // if (ev->key_type == LAYER)
@@ -38,7 +40,6 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         key_state->time_sent = time;
     }
 
-    debug("6. finite");
     debug_val("keycode[0]", "%d", ev->keycodes[0]);
     debug_val("keycode[1]", "%d", ev->keycodes[1]);
 
