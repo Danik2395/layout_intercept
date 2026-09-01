@@ -43,7 +43,7 @@ th_key_dw  th_key2_dw th_key_up th_key2_up | a_dw     s_dw     a_up     s_up
 
 7. resolv th to hold with th key
 th_key_dw  th_key2_dw ty_key2_up ty_key_up | shift_dw s_dw     s_up     shift_up
-0          25         50         75        | 25       50       50       75
+0          25         50         75        | 50       50       50       75
 
 8. double tap th key to repeat th.tap
 th_key_dw  th_key_up  th_key_dw  th_key_up | a_dw     a_up     a_dw     a_up
@@ -140,29 +140,43 @@ else
 вариант без постановки в стейт, потому что это в другом месте
 
 if ev.keytype == TAPHOLD
-    if gs->th_pending.active
+    if gs->th_pending[0].active
         if ev.keystroke == DOWN
-            if diff_time < gs->th_conf[gs->th_pending.event.keycode].idle_time
+            if diff_time < gs->th_conf[gs->th_pending[0].event.keycode_raw].idle_time
                 // отправить th_pending тап
                 // убрать таймер с th_pending
                 // поставить пришедшую клавишу в pending
                 // поставить таймер на пришедшую клавишу
             else
-                // отправить th_pending холд
-                // убрать таймер с th
-                // поставить пришедшую клавишу в pending
+                // поставить пришедшую клавишу в pending[1]
                 // поставить таймер на пришедшую клавишу
         else
-            if ev.keycode == gs->th_pending.event.keycode
-                // отправить пришедшую тап DOWN
-                // отправить пришедшую тап UP
-                // очистить th_pending
-                // убрать таймер пришедшей клавиши
+            if ev.keycode_raw != gs->th_pending[0].event.keycode_raw
+                if gs->th_pending[1].active
+                    // отправить th_pending DOWN hold
+                    // отправить пришедшую клавишу DOWN tap
+                    // отправить пришедшую клавишу UP tap
+                    // убрать таймер с пришедшей клавиши
+                    // убрать таймер с th_pending
+                    // очистить th_pending
+                    // очистить th_pending[1]
             else
-                // отправить UP из стейта для пришедшей клавиши
+                if gs->th_pending[1].active
+                    // отправить пришедшую DOWN tap
+                    // отправить th_pending[1] DOWN tap
+                    // отправить пришедшую UP tap
+                    // убрать таймер с пришедшей клавиши
+                    // убрать таймер с th_pending[1]
+                    // очистить th_pending
+                    // очистить th_pending[1]
+                else
+                    // отправить пришедшую тап DOWN
+                    // отправить пришедшую тап UP
+                    // очистить th_pending
+                    // убрать таймер пришедшей клавиши
     else
         if ev.keystroke == DOWN
-            if diff_time < gs->th_conf[ev.keycode].idle_time
+            if diff_time < gs->th_conf[ev.keycode_raw].idle_time
                 // отправить пришедшую тап
             else
                 // поставить пришедшую в th_pending
@@ -170,11 +184,11 @@ if ev.keytype == TAPHOLD
         else
             // отправить up пришедшей клавиши из стейта
 else
-    if !gs->th_pending.active return
+    if !gs->th_pending[0].active return
 
-    if !ev.keystroke == DOWN return
+    if ev.keystroke == UP return
 
-    if diff_time < gs->th_conf[gs->th_pending.event.keycode].idle_time
+    if diff_time < gs->th_conf[gs->th_pending[0].event.keycode].idle_time
         // отправить th_pending тап DOWN
         // отправить пришедшую клавишу DOWN
         // очистить th_pending
