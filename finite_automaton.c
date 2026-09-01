@@ -26,6 +26,7 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         key_state->keycodes_sent = (key_batch_t){0};
         key_state->layer_held = ev->layer;
         key_state->time_sent = time;
+        key_state->key_type = ev->key_type;
         // }
 
         // ...
@@ -38,6 +39,7 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         key_state->keycodes_sent = ev->st_keycodes;
         key_state->layer_held = 0;
         key_state->time_sent = time;
+        key_state->key_type = ev->key_type;
     }
 
     debug_val("keycode[0]", "%d", ev->keycodes[0]);

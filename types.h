@@ -82,6 +82,7 @@ typedef struct
     key_batch_t keycodes_sent;
     uint64_t time_sent;
     layer_t layer_held;
+    key_type_t key_type;
 } pressed_state_t;
 
 typedef struct
