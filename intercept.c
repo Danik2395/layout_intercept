@@ -100,7 +100,7 @@ int main(void)
 
                 debug_val("3. key_type before implement", "%d", event.key_type);
 
-                if (event.key_type == TAPHOLD || (event.key_type == NORMAL && gs.th_pending.active))
+                if (event.key_type == TAPHOLD || (event.key_type == NORMAL && gs.th_pending[0].active))
                 {
                     if (!implement_tap_hold(&gs, &event)) continue;
                 }
@@ -121,7 +121,7 @@ int main(void)
 
                 if (event.key_type == TAPHOLD)
                 {
-                    gs.th_pending.active = false;
+                    gs.th_pending[0].active = false;
                 }
             }
 
