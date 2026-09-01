@@ -37,27 +37,31 @@ th_key_dw  key_dw     key_up     th_key_up | shift_dw h_dw     h_up     shift_up
 key_dw     key_up     th_key_dw  th_key_up | h_dw     h_up     a_dw     a_up
 0          25         50         75        | 0        25       50       75
 
-6. resolv th to hold with th key
+6. fast typing with th only
+th_key_dw  th_key2_dw th_key_up th_key2_up | a_dw     s_dw     a_up     s_up
+0          25         50         75        | 50       50       50       75
+
+7. resolv th to hold with th key
 th_key_dw  th_key2_dw ty_key2_up ty_key_up | shift_dw s_dw     s_up     shift_up
 0          25         50         75        | 25       50       50       75
 
-7. double tap th key to repeat th.tap
+8. double tap th key to repeat th.tap
 th_key_dw  th_key_up  th_key_dw  th_key_up | a_dw     a_up     a_dw     a_up
 0          25         50         300       | 25       25       50       300
 
-8. resolc timer key to tap
+9. resolv timer key to tap
 tm_key_dw  tm_key_up                       | tab_dw   tab_up
 0          100                             | 100      100
 
-9. resolc timer key to hold
+10. resolv timer key to hold
 tm_key_dw  tm_key_up                       | esc_dw   esc_up
 0          250                             | 200      250
 
-10. alt alt test
+11. alt alt test
 lalt_dw    ralt_dw    ralt_up    lalt_up   | lalt_dw  crtl_dw  bkspc_dw ctrl_up bkspc_up lalt_up
 0          50         100        150       | 0        50       50       100     100      150
 
-11. oneone test
+12. oneone test
 ralt_dw    ralt_up                         | bkspc_dw bkspc_up
 0          50                              | 0        50
 
