@@ -447,6 +447,22 @@ logic_sequences: list[LogicSeqUnit] = [
                              50),
                     ]
                 ),
+        LogicSeqUnit(
+                name= "12. nav test",
+                write_seq= [
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 58, value= 1),
+                             0),
+                    TestUnit(InputEvent(seconds= 0, useconds= 10000, ev_type= 0, code= 0, value= 0),
+                             0),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 58, value= 0),
+                             250),
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 0, code= 0, value= 0),
+                             250),
+                    ],
+                target_seq = [
+                    ]
+                ),
         ]
 
 bad_macro_seq: list[TestUnit] = [
