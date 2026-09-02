@@ -4,7 +4,7 @@ import struct
 BYTES_EV_FMT : str = "qqHHi"
 BYTES_EV_SIZE: int = struct.calcsize(BYTES_EV_FMT)
 
-TIME_DELTA_MS = 15
+TIME_DELTA_MS = 5
 
 GREEN = "\033[92m"
 RED   = "\033[91m"
