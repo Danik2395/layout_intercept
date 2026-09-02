@@ -74,6 +74,6 @@ void finite_event(global_state_t* gs, const internal_event_t* ev)
         flush_q[flush_ev_cnt++] = report_event;
     }
 
-    debug_val("8. flush", "%d\n", flush_ev_cnt);
+    debug_val("8. flush", "%d", flush_ev_cnt);
     (void)write(STDOUT_FILENO, flush_q, sizeof(struct input_event) * (uint64_t)flush_ev_cnt);
 }
