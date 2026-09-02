@@ -508,6 +508,71 @@ logic_sequences: list[LogicSeqUnit] = [
                 target_seq = [
                     ]
                 ),
+        LogicSeqUnit(
+                name= "13. double th resolv to hold but first released earlier",
+                write_seq= [
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
+                             0),
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 0, code= 0, value= 0),
+                             0),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 110000, ev_type= 1, code= 31, value= 1),
+                             110),
+                    TestUnit(InputEvent(seconds= 0, useconds= 110000, ev_type= 0, code= 0, value= 0),
+                             110),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 30, value= 0),
+                             250),
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 0, code= 0, value= 0),
+                             250),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 300000, ev_type= 1, code= 35, value= 1),
+                             300),
+                    TestUnit(InputEvent(seconds= 0, useconds= 300000, ev_type= 0, code= 0, value= 0),
+                             300),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 330000, ev_type= 1, code= 31, value= 0),
+                             330),
+                    TestUnit(InputEvent(seconds= 0, useconds= 330000, ev_type= 0, code= 0, value= 0),
+                             330),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 340000, ev_type= 1, code= 35, value= 0),
+                             340),
+                    TestUnit(InputEvent(seconds= 0, useconds= 340000, ev_type= 0, code= 0, value= 0),
+                             340),
+                    ],
+                target_seq = [
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 1, code= 42, value= 1),
+                             200),
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 0, code= 0, value= 0),
+                             200),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 42, value= 0),
+                             250),
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 0, code= 0, value= 0),
+                             250),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 300000, ev_type= 1, code= 19, value= 1),
+                             300),
+                    TestUnit(InputEvent(seconds= 0, useconds= 300000, ev_type= 0, code= 0, value= 0),
+                             300),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 300000, ev_type= 1, code= 21, value= 1),
+                             300),
+                    TestUnit(InputEvent(seconds= 0, useconds= 300000, ev_type= 0, code= 0, value= 0),
+                             300),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 330000, ev_type= 1, code= 19, value= 0),
+                             330),
+                    TestUnit(InputEvent(seconds= 0, useconds= 330000, ev_type= 0, code= 0, value= 0),
+                             330),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 340000, ev_type= 1, code= 21, value= 0),
+                             340),
+                    TestUnit(InputEvent(seconds= 0, useconds= 340000, ev_type= 0, code= 0, value= 0),
+                             340),
+                    ]
+                ),
         ]
 
 bad_macro_seq: list[TestUnit] = [
