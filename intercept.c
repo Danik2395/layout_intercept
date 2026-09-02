@@ -52,7 +52,8 @@ int main(void)
     while (1)
     {
         int num_fds = epoll_wait(gs.epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
-        debug("1. after epoll");
+        debug("\n1. after epoll");
+        debug_val("num_fds", "%d", num_fds);
 
         if (num_fds == -1)
         {
@@ -99,6 +100,8 @@ int main(void)
                 }
 
                 debug_val("3. key_type before implement", "%d", event.key_type);
+                debug_val("th[0].active", "%d", gs.th_pending[0].active);
+                debug_val("th[1].active", "%d", gs.th_pending[1].active);
 
                 if (event.key_type == TAPHOLD || (event.key_type == NORMAL && gs.th_pending[0].active))
                 {
