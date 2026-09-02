@@ -46,23 +46,30 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
             else
             {
                 timer_stop(gs->key_fds[ev->keycode_raw]);
-                thp[0].active = false;
                 ev->st_keycodes = gs->th_conf[ev->keycode_raw].tap_keycodes;
 
                 if (ev->keycode_raw != thp[0].event.keycode_raw)
                 {
-                    timer_stop(gs->key_fds[thp[0].event.keycode_raw]);
-                    thp[1].active = false;
+                    if (thp[1].active)
+                    {
                         debug("thbr 3");
+                        timer_stop(gs->key_fds[thp[0].event.keycode_raw]);
+                        thp[0].active = false;
+                        thp[1].active = false;
 
-                    event_to_q(gs, &thp[0].event);
-                    debug_val("in triple resolv th to hold. thp[0].keycode", "%d", thp[0].event.keycodes[0]);
+                        event_to_q(gs, &thp[0].event);
+                        debug_val("in triple resolv th to hold. thp[0].keycode", "%d", thp[0].event.keycodes[0]);
 
-                    ev->keystroke = DOWN;
-                    event_to_q(gs, ev);
+                        ev->keystroke = DOWN;
+                        event_to_q(gs, ev);
+
+                        ev->keystroke = UP;
+                        event_to_q(gs, ev);
+                    }
                 }
                 else
                 {
+                    thp[0].active = false;
                     if (gs->th_pending[1].active)
                     {
                         debug("thbr 4");
@@ -84,8 +91,6 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
                     ev->keystroke = UP;
                     event_to_q(gs, ev);
                 }
-                ev->keystroke = UP;
-                event_to_q(gs, ev);
             }
         }
         else
