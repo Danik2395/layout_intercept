@@ -124,7 +124,28 @@ int main(void)
 
                 if (event.key_type == TAPHOLD)
                 {
-                    gs.th_pending[0].active = false;
+                    bool thp_zero = gs.th_pending[0].event.keycode_raw == event.keycode_raw;
+                    // th_pending_t* origin_thp = thp_zero ? &gs.th_pending[0] : &gs.th_pending[1];
+
+                    debug_val("thp_zero", "%d", thp_zero);
+                    debug_val("thp_1.active", "%d", gs.th_pending[1].active);
+
+                    if (thp_zero)
+                    {
+                        if (gs.th_pending[1].active)
+                        {
+                            gs.th_pending[0].event = gs.th_pending[1].event;
+                            gs.th_pending[1].active = false;
+                        }
+                        else
+                        {
+                            gs.th_pending[0].active = false;
+                        }
+                    }
+                    else
+                    {
+                        gs.th_pending[1].active = false;
+                    }
                 }
             }
 
