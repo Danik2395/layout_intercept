@@ -22,7 +22,7 @@ internal_event_t event_to_internal(const struct input_event* ev)
     internal_event_t internal_ev = {
         .keycode_raw = ev->code,
         .st_keycodes = {{ev->code}},
-        .keystroke = ev->value,
+        .keystroke   = ev->value,
         .key_time_ms = get_time_ms()
     };
     return internal_ev;

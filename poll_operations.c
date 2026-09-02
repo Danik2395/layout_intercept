@@ -37,7 +37,7 @@ void close_fds(global_state_t* gs)
 static inline struct timespec ms_to_timespec(uint64_t ms)
 {
     struct timespec ts = {
-        .tv_sec = (int64_t)ms / (int64_t)1000,
+        .tv_sec  = (int64_t)ms / (int64_t)1000,
         .tv_nsec = ((int64_t)ms % (int64_t)1000) * (int64_t)1000000
     };
     return ts;
@@ -56,7 +56,7 @@ void timer_start(global_state_t* gs, const internal_event_t* ev, uint64_t ms)
     *waiting_key = *ev;
 
     struct epoll_event epoll_ev = {
-        .events = EPOLLIN,
+        .events   = EPOLLIN,
         .data.ptr = waiting_key
     };
 

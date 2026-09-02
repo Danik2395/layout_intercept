@@ -27,18 +27,18 @@ int main(void)
     internal_event_t event;
 
     global_state_t gs = {0};
-    gs.th_conf = taphold_config;
-    gs.timer_conf = timer_config;
-    gs.layers_conf = layers_config;
-    gs.oneone_conf = oneone_config;
-    gs.q_pos = -1;
+    gs.th_conf        = taphold_config;
+    gs.timer_conf     = timer_config;
+    gs.layers_conf    = layers_config;
+    gs.oneone_conf    = oneone_config;
+    gs.q_pos          = -1;
 
     make_key_type_lookup(&gs);
 
     const char stdin_marker = 0;
     struct epoll_event epoll_events[EPOLL_EVENTS_MAX];
     struct epoll_event stdin_epoll_ev = {
-        .events = EPOLLIN,
+        .events   = EPOLLIN,
         .data.ptr = (void*)&stdin_marker
     };
 
@@ -52,6 +52,7 @@ int main(void)
     while (1)
     {
         int num_fds = epoll_wait(gs.epollfd, epoll_events, EPOLL_EVENTS_MAX, -1);
+
         debug("\n1. after epoll");
         debug_val("num_fds", "%d", num_fds);
 
@@ -115,6 +116,7 @@ int main(void)
             else // On timer interrupt
             {
                 event = *(internal_event_t*)epoll_event->data.ptr; // From key_waiting
+
                 debug_val("on timer interupt. keycode", "%d", event.keycodes[0]);
 
                 int on_timer_fd = gs.key_fds[event.keycode_raw];
@@ -125,7 +127,6 @@ int main(void)
                 if (event.key_type == TAPHOLD)
                 {
                     bool thp_zero = gs.th_pending[0].event.keycode_raw == event.keycode_raw;
-                    // th_pending_t* origin_thp = thp_zero ? &gs.th_pending[0] : &gs.th_pending[1];
 
                     debug_val("thp_zero", "%d", thp_zero);
                     debug_val("thp_1.active", "%d", gs.th_pending[1].active);
@@ -153,13 +154,15 @@ int main(void)
             do
             {
                 internal_event_t* send_event = gs.q_pos == -1 ? &event : &gs.send_q[ev_idx];
-                debug_val("4. q_pos", "%d", gs.q_pos);
 
                 (void)postclassify_key_type(send_event);
+
+                debug_val("4. q_pos", "%d", gs.q_pos);
                 debug_val("type", "%d", send_event->key_type);
                 debug_val("layers_mask before", "%d", gs.layers_mask);
 
                 (void)handle_layer_key(&gs, send_event);
+
                 debug_val("layers_mask after_1", "%d", gs.layers_mask);
 
                 if (send_event->key_type == LAYER)
