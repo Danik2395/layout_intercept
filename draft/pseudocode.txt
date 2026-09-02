@@ -65,75 +65,9 @@ lalt_dw    ralt_dw    ralt_up    lalt_up   | lalt_dw  crtl_dw  bkspc_dw ctrl_up 
 ralt_dw    ralt_up                         | bkspc_dw bkspc_up
 0          50                              | 0        50
 
----
-
-global_state_t* gs
-internal_event_t ev
-
-long long diff_time = diff_time(gs->prev_key_time_ms,  ev.key_time_ms)
-
-if ev.keytype == TAPHOLD
-    if gs->th_pending.active
-        if ev.keystroke == DOWN
-            if diff_time < gs->th_conf[gs->th_pending.event.keycode].idle_time
-                // отправить th тап DOWN
-                // убрать таймер из th
-                // поставить th в стейт как тап
-                // поставить пришедшую клавишу в pending
-                // поставить таймер на пришедшую клавишу
-            else
-                // отправить th холд DOWN
-                // убрать таймер th
-                // поставить th в стейт как холд
-                // поставить пришедшую клавишу в pending
-                // поставить таймер на пришедшую клавишу
-        else
-            if ev.keycode == gs->th_pending.event.keycode
-                // отправить th тап DOWN
-                // отправить th тап UP
-                // очистить th_pending
-                // убрать таймер этой клавиши
-            else
-                // отправить UP из стейта для этой клавиши
-                // очистить стейт для этой клавиши
-    else
-        if ev.keystroke == DOWN
-            if diff_time < gs->th_conf[ev.keycode].idle_time
-                // отправить th тап DOWN
-                // поставить th в стейт как TAP
-            else
-                // поставить th в th_pending
-                // поставить таймер этого th
-        else
-            // отправить up этой клавиши из стейта
-            // очистить стейт этой клавиши
-else
-    if gs->th_pending.active
-        if ev.keystroke == DOWN
-            if diff_time < gs->th_conf[gs->th_pending.event.keycode].idle_time
-                // отправить th_pending тап DOWN
-                // отправить пришедшую клавишу DOWN
-                // поставить th в стейт как тап
-                // поставить пришедшую клавишу в стейт
-                // очистить th_pending
-                // убрать таймер с th
-            else
-                // отправить th_pending холд DOWN
-                // отправить пришедшую клавишу DOWN
-                // поставить th в стейт как холд
-                // поставить пришедшую клавишу в стейт
-                // очистить th_pending
-                // убрать таймер с th
-        else
-            // отправить клавишу вверх
-            // убрать из стейта эту клашишу
-    else
-        if ev.keystroke == DOWN
-            // отправить клавишу DOWN
-            // поставить эту клавишу в стейт
-        else
-            // отправить клавишу UP
-            // убрать эту клавишу из стейта
+13. double th resolv to hold but key pressed in between earlier
+th_key_dw  th_key2_dw th_key_up  key_dw     th_key2_up key_up    | shift_dw shift_up s_dw     h_dw     s_up     h_up
+0          110        250        300        330        340       | 200      250      300      300      330      340
 
 ---
 
