@@ -1,6 +1,6 @@
 # layout_intercept
 
-C pluggin for [interception-tools](#src0) that I wrote for myself because using combines isn't as fancy.
+C plugin for [interception-tools](#src0) that I wrote for myself because using all-in-one deamons isn't as fancy.
 
 It remaps physical qwerty layout to desired, manages layers and key overload: tap-hold, on timer expiration, one to one remap.
 
@@ -17,7 +17,7 @@ Navigation:
 - [Test](#test)
 - [Dev log](#dev-log)
 - [Sources](#sources)
-- [Documenatuon](docs/docs.md)
+- [Documentation](docs/docs.md)
 
 ---
 
@@ -34,13 +34,14 @@ Navigation:
         - Blocking resolving loop. Thus all is sequentially correct
 - Procedure C Data-oriented-Design
     - `global_state_t` as structure of arrays
-    - Data size optimization (see анонимный юнион ссылка)
-- здесь про ренний выход
+    - Data size optimization (see [internal_event_t.union](docs/docs.md#internal_event_t))
+- Flat code & guard clauses
+    - Adherence to the early return pattern wherever was possible
 - Minimal overhead on I/O
     - Macro keys (e.g. ctrl+key) and key + syn_ev are written all at once.\
       In one `write()` call from array they've been collected into
     - Not using `fwrite()` and `fread()` because of no bufferisation.\
-      This functions implement buffers inside them that leads to unnecesary overhead
+      These functions implement buffers inside them that leads to unnecesary overhead
 - Hardware O(1) bitmask layer routing
     - Leading layer is found by using `__builtin_clz` [instruction](#src5) of GCC
 - Physical key keycode as identificator
@@ -52,7 +53,7 @@ Navigation:
 
 ```
 
-               Start pluggin
+               Start plugin
                  - Bfferisation to null
                  - Initialize data
                  - Make configs
@@ -104,7 +105,7 @@ Main while
                |                                                     |
                v                                                     |
                                                                      |
-Certral functions                  Timer interrupt <-----------------*
+Central functions                  Timer interrupt <-----------------*
   - implement_tap_hold             |
   - implement_overload_timer       |
                |                   |
@@ -132,7 +133,7 @@ Send do while
                |
                v
 
-               (key is mutated to non send type)  -> finit event
+               (key is mutated to non send type)  -> finite event
                                                      continue loop
 
                |
@@ -141,7 +142,7 @@ Send do while
                (key is UP type)                   -> take even from waiting
                                                      Toggle layer if needed
                                                      - handle_layer_key
-                                                     finit event
+                                                     finite event
                                                      continue loop
 
                |
