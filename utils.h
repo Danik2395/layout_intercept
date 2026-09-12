@@ -2,6 +2,7 @@
 #include <linux/input.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <string.h>
 #include "types.h"
 #include "debug.h"
 
@@ -35,7 +36,8 @@ static inline uint64_t diff_time(uint64_t t, uint64_t t1)
 
 static inline bool keycodes_equal_ptr(const key_batch_t* k, const key_batch_t* k1)
 {
-    return *(uint64_t*)k == *(uint64_t*)k1;
+    // return *(uint64_t*)k == *(uint64_t*)k1;
+    return memcmp(k, k1, sizeof(key_batch_t)) == 0;
 }
 
 static inline bool keycodes_equal_val(const key_batch_t* k, key_batch_t k1)
