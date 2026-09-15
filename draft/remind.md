@@ -78,3 +78,52 @@
 19. read и write, а не fread и fwrite, потому что отключена буферизация.
     и fread ждёт, пока придёт нужное количество байт. Если придёт меньше, а потом нормальная структура, то все последующие данные будут битыми.
     и если от OS придут битые данные, то что-то явно не так.
+
+20. по тестам ерунда то, что cpu-bound ридер.
+
+21. нужно в pressed_state сохранять тип клавиши, чтобы потом его доставать. он же может меняться, а от этого логика слоёв зависит
+
+22. чтобы можно было делать перекат по th клавишам нужно два буфера. и всё разрешается на третьей клавише. (6 тест)
+
+23. нужно перемещать th1 в th0, чтобы логика нормально работала (тест 13).
+    иначе будет случай, что останется неразрешённой th1, и пришедшая клавиша уйдёт в не ту ветку
+
+24. нужно ещё иметь pending для обычных клавиш.
+
+25. late game implementation pipeline:
+        0. test pluggin on spare machine and understand that it doesn’t work as it should
+        1. write pseudotest
+        2. brain run pseudocode on pseudotest
+        3. make sure that it doesn't work
+        4. write test sequence
+        5. run test to see if what actually isn't working
+            - udjust test and sequence if they're wrong
+        6. write pseudocode
+        7. brain run pseudocode on pseudotest
+            - repeat steps 6-7 till it starts working
+        8. write code
+        9. run test
+            - repeat steps 8-9 till it starts working
+            - if it doesn't return to step 7
+        10. understand that there are too many possible if/else cases to resolv th properly
+        11. implement another queue
+
+26. в triple ресолвах нет проверки какой-либо по таймеру, потому что это явное разграничение на shift и rollover поведение.
+    типа 1 2 1 2 это будет две клавиши как есть, а 1 2 2 1 будет активировать то, что hold стоит
+
+27. оказывается, что я пользуюсь на nav слой умным таймером, а не обычным. нужно будет сделать ещё функцию для этого таймера.
+
+28. triple resolv: rollover, th to nrm
+
+29. только что рассказал себе, как сделать очередь для тапхолда:
+    есть 4 основных ресолва: два на rollover и два на rollinterrupt.
+    их разрешение зависит от того, какая клавиша пришла вверх, вторая или первая.
+    Но в очереди больше клавиш.
+    В очередь нельзя зайти не с th клавиши. Значит она будет всегда стоять на 0 смещении в массиве.
+
+    Ситуация: th_dw th1_dw key_dw key1_dw keyn_dw ?_up
+    Если ? клавиша будет th , то thp[0] ресолвится как tap , а вся очередь сливается в отправку как tap  или просто, если это nrm key.
+    Если ? клавиша будет nrm, то thp[0] ресолвится как hold, а вся очередь сливается в отправку как hold или просто, если это nrm key.
+
+    В тестах на компе смотреть ещё кейс, что сейчас у меня, если thp[0] приходит, а th[1] ещё active, то оно смещается в 0 индекс
+    сейчас типа идёт отмена 23 пункта
