@@ -3,6 +3,7 @@ hold    = 200
 th_key  = a, shift (remap to n)
 th_key2 = s, ctrl  (remap to r)
 key     = h
+key2    = z
 
 hold    = 125
 tm_key  = tab, esc
@@ -69,6 +70,14 @@ ralt_dw    ralt_up                         | bkspc_dw bkspc_up
 th_key_dw  th_key2_dw th_key_up  key_dw     th_key2_up key_up    | shift_dw shift_up s_dw     h_dw     s_up     h_up
 0          110        250        300        330        340       | 200      250      300      300      330      340
 
+14. thp test queue
+th_key_dw  key_dw     key2_dw    key_up     key2_up    th_key_up | shift_dw h_dw     z_dw     h_dw     z_up     shift_up
+0          50         100        150        200        250       | 150      150      150      150      200      200
+
+15. thp test2 queue
+th_key_dw  key_dw     key2_dw    th_key_up  key2_up    key_up    | a_dw     h_dw     z_dw     h_dw     z_up     a_up
+0          50         100        150        200        250       | 150      150      150      150      200      200
+
 ---
 
 вариант без постановки в стейт, потому что это в другом месте
@@ -132,6 +141,86 @@ else
         // отправить пришедшую клавишу DOWN
         // очистить th_pending
         // убрать таймер с th
+
+---
+
+с очередью
+
+функция_сливать_очередь_полностью()
+    // идти по очереди от thp_head до thp_tail
+        if thp[n].event.type == TAPHOLD
+            if thp[n].active == false
+                // поставить в очередь thp[n] HOLD
+            else
+                // поставить в очередь thp[n] TAP
+            continue
+        // поставить в очередь обычную клавишу
+    thp_head = thp_tail = 0
+    thp[thp_head].active = false
+
+функция_сливать_очередь_до_нересолвленного_th()
+    // идти по очереди от thp_head до thp_tail
+        if thp[n].event.type == TAPHOLD
+            if thp[n].active == true
+                thp_head = n
+                return
+            // поставить в очередь thp[n] TAP
+            continue
+        // поставить в очередь обычную клавишу
+    thp_head = thp_tail = 0
+    thp[thp_head].active = false
+
+
+
+if ev.keytype == TAPHOLD
+    if gs->th_pending[0].active
+        if ev.keystroke == DOWN
+            if diff_time < gs->th_conf[gs->th_pending[0].event.keycode_raw].idle_time
+                ветка типа не работает (unreachable)
+                // отправить th_pending тап
+                // убрать таймер с th_pending
+                // поставить пришедшую клавишу в pending
+                // поставить таймер на пришедшую клавишу
+            else
+                // поставить пришедшую в thp[thp_tail]
+                // thp[thp_tail].active = true
+                // thp_tail = (thp_tail + 1) % THP_SIZE
+                // поставить таймер на пришедшую клавишу
+        else
+            if ev.keycode_raw == gs->th_pending[0].event.keycode_raw
+                // функция_сливать_очередь_полностью()
+            else
+                // thp[thp_head].active = false
+                // функция_сливать_очередь_полностью()
+    else
+        if ev.keystroke == DOWN
+            if diff_time < gs->th_conf[ev.keycode_raw].idle_time
+                // отправить пришедшую тап
+            else
+                // поставить пришедшую в thp[thp_tail]
+                // thp[thp_tail].active = true
+                // thp_tail = (thp_tail + 1) % THP_SIZE
+                // поставить таймер пришедшей
+        else
+            // отправить up пришедшей клавиши из стейта
+else
+    if !gs->th_pending[0].active return
+
+    if ev.keystroke == UP
+        if thp[0].active
+            // thp[thp_head].active = false
+            // функция_сливать_очередь_полностью()
+
+    if diff_time < gs->th_conf[gs->th_pending[0].event.keycode].idle_time
+        // отправить tap[0] тап DOWN
+        // отправить пришедшую клавишу DOWN
+        // очистить thp[0]
+        // убрать таймер с th
+    else
+        // поставить пришедшую в thp[thp_tail]
+        // thp[thp_tail].active = true
+        // thp_tail = (thp_tail + 1) % THP_SIZE
+
 
 ---
 
