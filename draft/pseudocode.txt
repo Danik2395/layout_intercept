@@ -28,7 +28,7 @@ key_dw     key_up                          | h_dw     h_up
 
 3. resolv th to hold with normal key
 th_key_dw  key_dw     key_up     th_key_up | shift_dw h_dw     h_up     shift_up
-0          50         100        150       | 50       50       100      150
+0          50         100        150       | 100      100      100      150
 
 4. th key hold
 th_key_dw  key_dw     key_up     th_key_up | shift_dw h_dw     h_up     shift_up

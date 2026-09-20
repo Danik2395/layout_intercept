@@ -116,15 +116,15 @@ logic_sequences: list[LogicSeqUnit] = [
                              150),
                     ],
                 target_seq = [
-                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 42, value= 1),
-                             50),
-                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
-                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 1, code= 42, value= 1),
+                             100),
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 0, code= 0, value= 0),
+                             100),
 
-                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 21, value= 1),
-                             50),
-                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
-                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 1, code= 21, value= 1),
+                             100),
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 0, code= 0, value= 0),
+                             100),
 
                     TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 1, code= 21, value= 0),
                              100),
