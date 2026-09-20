@@ -23,6 +23,11 @@ static inline bool is_layer(layer_t mask, layer_t layer)
     return (mask & layer) != 0;
 }
 
+static inline bool is_only_layer(layer_t mask, layer_t layer)
+{
+    return mask == layer;
+}
+
 // return 1 if key was remapped,
 // return 0 if wasn't
 int remap_key_layer(const global_state_t* gs, internal_event_t* ev);
