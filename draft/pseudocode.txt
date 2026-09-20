@@ -71,12 +71,12 @@ th_key_dw  th_key2_dw th_key_up  key_dw     th_key2_up key_up    | shift_dw shif
 0          110        250        300        330        340       | 200      250      300      300      330      340
 
 14. thp test queue
-th_key_dw  key_dw     key2_dw    key_up     key2_up    th_key_up | shift_dw h_dw     z_dw     h_dw     z_up     shift_up
-0          50         100        150        200        250       | 150      150      150      150      200      200
+th_key_dw  key_dw     key2_dw    key_up     key2_up    th_key_up | shift_dw h_dw     z_dw     h_up     z_up     shift_up
+0          50         100        150        200        250       | 150      150      150      150      200      250
 
 15. thp test2 queue
-th_key_dw  key_dw     key2_dw    th_key_up  key2_up    key_up    | a_dw     h_dw     z_dw     h_dw     z_up     a_up
-0          50         100        150        200        250       | 150      150      150      150      200      200
+th_key_dw  key_dw     key2_dw    th_key_up  key2_up    key_up    | a_dw     h_dw     z_dw     a_up     z_up     h_up
+0          50         100        150        200        250       | 150      150      150      150      200      250
 
 ---
 
@@ -173,53 +173,47 @@ else
 
 
 if ev.keytype == TAPHOLD
-    if gs->th_pending[0].active
+    if gs->th_pending[thp_head].active
         if ev.keystroke == DOWN
-            if diff_time < gs->th_conf[gs->th_pending[0].event.keycode_raw].idle_time
-                ветка типа не работает (unreachable)
-                // отправить th_pending тап
-                // убрать таймер с th_pending
-                // поставить пришедшую клавишу в pending
-                // поставить таймер на пришедшую клавишу
-            else
-                // поставить пришедшую в thp[thp_tail]
-                // thp[thp_tail].active = true
-                // thp_tail = (thp_tail + 1) % THP_SIZE
-                // поставить таймер на пришедшую клавишу
+            // поставить пришедшую в thp[thp_tail]
+            // thp[thp_tail].active = true
+            // thp_tail = (thp_tail + 1) % THP_SIZE
+            // поставить таймер на пришедшую клавишу
         else
-            if ev.keycode_raw == gs->th_pending[0].event.keycode_raw
+            if ev.keycode_raw == gs->th_pending[thp_head].event.keycode_raw
+                // поставить пришедшую в thp
                 // функция_сливать_очередь_полностью()
+                // убрать таймер с пришедшей клавиши
             else
+                // поставить пришедшую в thp
                 // thp[thp_head].active = false
                 // функция_сливать_очередь_полностью()
+                // убрать таймер с пришедшей клавиши
     else
         if ev.keystroke == DOWN
             if diff_time < gs->th_conf[ev.keycode_raw].idle_time
                 // отправить пришедшую тап
             else
-                // поставить пришедшую в thp[thp_tail]
+                // поставить пришедшую в thp[thp_tail] как HOLD
                 // thp[thp_tail].active = true
                 // thp_tail = (thp_tail + 1) % THP_SIZE
                 // поставить таймер пришедшей
         else
             // отправить up пришедшей клавиши из стейта
 else
-    if !gs->th_pending[0].active return
+    if !gs->th_pending[thp_head].active return
 
     if ev.keystroke == UP
-        if thp[0].active
+        if thp[thp_head].active
+            // поставить пришедшую в thp[thp_tail]
+            // thp[thp_tail].active = true
+            // thp_tail = (thp_tail + 1) % THP_SIZE
             // thp[thp_head].active = false
             // функция_сливать_очередь_полностью()
 
-    if diff_time < gs->th_conf[gs->th_pending[0].event.keycode].idle_time
-        // отправить tap[0] тап DOWN
-        // отправить пришедшую клавишу DOWN
-        // очистить thp[0]
-        // убрать таймер с th
-    else
-        // поставить пришедшую в thp[thp_tail]
-        // thp[thp_tail].active = true
-        // thp_tail = (thp_tail + 1) % THP_SIZE
+    // поставить пришедшую в thp[thp_tail]
+    // thp[thp_tail].active = true
+    // thp_tail = (thp_tail + 1) % THP_SIZE
 
 
 ---
