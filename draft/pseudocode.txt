@@ -66,9 +66,7 @@ lalt_dw    ralt_dw    ralt_up    lalt_up   | lalt_dw  crtl_dw  bkspc_dw ctrl_up 
 ralt_dw    ralt_up                         | bkspc_dw bkspc_up
 0          50                              | 0        50
 
-13. double th resolv to hold but key pressed in between earlier
-th_key_dw  th_key2_dw th_key_up  key_dw     th_key2_up key_up    | shift_dw shift_up s_dw     h_dw     s_up     h_up
-0          110        250        300        330        340       | 200      250      300      300      330      340
+13. nav test
 
 14. thp test queue
 th_key_dw  key_dw     key2_dw    key_up     key2_up    th_key_up | shift_dw h_dw     z_dw     h_up     z_up     shift_up
