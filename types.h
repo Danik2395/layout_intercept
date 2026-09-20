@@ -35,7 +35,8 @@ typedef enum
 } keystroke_t;
 
 #define BATCH_SIZE 4
-#define QUEUE_SIZE 16
+#define THP_SIZE 16
+#define QUEUE_SIZE THP_SIZE * 2
 #define FLUSH_QUEUE_SIZE BATCH_SIZE * 2
 
 typedef uint16_t batch_t[BATCH_SIZE];
@@ -91,8 +92,6 @@ typedef struct
     internal_event_t event;
 } th_pending_t;
 
-#define THP_SIZE 2
-
 typedef struct
 {
     uint64_t prev_key_time_ms;
@@ -107,6 +106,8 @@ typedef struct
     int q_pos;
     internal_event_t send_q[QUEUE_SIZE];
 
+    int thp_head;
+    int thp_tail;
     th_pending_t th_pending[THP_SIZE];
     const th_conf_t* th_conf; // size KEY_CNT
 

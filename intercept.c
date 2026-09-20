@@ -101,10 +101,10 @@ int main(void)
                 }
 
                 debug_val("3. key_type before implement", "%d", event.key_type);
-                debug_val("th[0].active", "%d", gs.th_pending[0].active);
-                debug_val("th[1].active", "%d", gs.th_pending[1].active);
+                debug_val("th[0].active", "%d", gs.th_pending[gs.thp_head].active);
+                debug_val("th[1].active", "%d", gs.th_pending[(gs.thp_head + 1) % THP_SIZE].active);
 
-                if (event.key_type == TAPHOLD || (event.key_type == NORMAL && gs.th_pending[0].active))
+                if (event.key_type == TAPHOLD || (event.key_type == NORMAL && gs.th_pending[gs.thp_head].active))
                 {
                     if (!implement_tap_hold(&gs, &event)) continue;
                 }
@@ -126,26 +126,21 @@ int main(void)
 
                 if (event.key_type == TAPHOLD)
                 {
-                    bool thp_zero = gs.th_pending[0].event.keycode_raw == event.keycode_raw;
-
-                    debug_val("thp_zero", "%d", thp_zero);
-                    debug_val("thp_1.active", "%d", gs.th_pending[1].active);
-
-                    if (thp_zero)
+                    if (gs.th_pending[gs.thp_head].event.keycode_raw == event.keycode_raw)
                     {
-                        if (gs.th_pending[1].active)
-                        {
-                            gs.th_pending[0].event = gs.th_pending[1].event;
-                            gs.th_pending[1].active = false;
-                        }
-                        else
-                        {
-                            gs.th_pending[0].active = false;
-                        }
+                        (void)flush_thp_rebuild(&gs);
                     }
                     else
                     {
-                        gs.th_pending[1].active = false;
+                        for (int n = gs.thp_head; n != gs.thp_tail; n = (n + 1) % THP_SIZE)
+                        {
+                            th_pending_t* thp = &gs.th_pending[n];
+                            if (thp->event.keycode_raw == event.keycode_raw)
+                            {
+                                thp->active = false;
+                            }
+                        }
+                        continue;
                     }
                 }
             }

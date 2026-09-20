@@ -4,11 +4,59 @@
 #include "poll_operations.h"
 #include "debug.h"
 
-static inline void swap_events(internal_event_t* ev, internal_event_t* ev1)
+void flush_thp_all(global_state_t* gs)
 {
-    internal_event_t temp_ev = *ev;
-    *ev = *ev1;
-    *ev1 = temp_ev;
+    th_pending_t* thp = gs->th_pending;
+
+    int n = gs->thp_head;
+    while (n != gs->thp_tail)
+    {
+        if (thp[n].event.key_type == TAPHOLD)
+        {
+            const th_conf_t* thp_n_conf = &gs->th_conf[thp[n].event.keycode_raw];
+            if (thp[n].active)
+            {
+                thp[n].event.st_keycodes = thp_n_conf->tap_keycodes;
+            }
+        }
+
+        event_to_q(gs, &thp[n].event);
+
+        n = (n + 1) % THP_SIZE;
+    }
+
+    gs->thp_head = gs->thp_tail = 0;
+    thp[0].active = false;
+}
+
+int flush_thp_rebuild(global_state_t* gs)
+{
+    th_pending_t* thp = gs->th_pending;
+
+    int n = gs->thp_head;
+    while (n != gs->thp_tail)
+    {
+        if (thp[n].event.key_type == TAPHOLD)
+        {
+            if (thp[n].active)
+            {
+                gs->thp_head = n;
+                return 1;
+            }
+
+            const th_conf_t* thp_n_conf = &gs->th_conf[thp[n].event.keycode_raw];
+            thp[n].event.st_keycodes = thp_n_conf->tap_keycodes;
+        }
+
+        event_to_q(gs, &thp[n].event);
+
+        n = (n + 1) % THP_SIZE;
+    }
+
+    gs->thp_head = gs->thp_tail = 0;
+    thp[0].active = false;
+
+    return 0;
 }
 
 int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
@@ -22,80 +70,32 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
 
     if (ev->key_type == TAPHOLD)
     {
-        if (thp[0].active)
+        if (thp[gs->thp_head].active)
         {
             if (ev->keystroke == DOWN)
             {
                 ev->st_keycodes = gs->th_conf[ev->keycode_raw].hold_keycodes;
-                if (diff_t < gs->th_conf[thp[0].event.keycode_raw].idle_time)
-                {
-                    debug("thbr 1");
+                debug("thbr 2");
 
-                    timer_stop(gs->key_fds[thp[0].event.keycode_raw]);
-                    timer_start(gs, ev, gs->th_conf[ev->keycode_raw].hold_time);
-                    swap_events(ev, &thp[0].event);
-                    ev->st_keycodes = gs->th_conf[ev->keycode_raw].tap_keycodes;
-                }
-                else
-                {
-                    debug("thbr 2");
-
-                    thp[1].active = true;
-                    thp[1].event = *ev;
-                    timer_start(gs, ev, gs->th_conf[ev->keycode_raw].hold_time);
-                    return 0;
-                }
+                event_to_thp(gs, ev);
+                timer_start(gs, ev, gs->th_conf[ev->keycode_raw].hold_time);
+                return 0;
             }
             else
             {
                 timer_stop(gs->key_fds[ev->keycode_raw]);
-                ev->st_keycodes = gs->th_conf[ev->keycode_raw].tap_keycodes;
+                event_to_thp(gs, ev);
 
-                if (ev->keycode_raw != thp[0].event.keycode_raw)
+                if (ev->keycode_raw == thp[gs->thp_head].event.keycode_raw)
                 {
-                    if (thp[1].active)
-                    {
-                        debug("thbr 3");
-                        debug_val("in triple resolv th to hold. thp[0].keycode", "%d", thp[0].event.keycodes[0]);
-
-                        timer_stop(gs->key_fds[thp[0].event.keycode_raw]);
-                        thp[0].active = false;
-                        thp[1].active = false;
-
-                        event_to_q(gs, &thp[0].event);
-
-                        ev->keystroke = DOWN;
-                        event_to_q(gs, ev);
-
-                        ev->keystroke = UP;
-                        event_to_q(gs, ev);
-                    }
+                    debug("thbr 3");
+                    flush_thp_all(gs);
                 }
                 else
                 {
-                    thp[0].active = false;
-                    if (gs->th_pending[1].active)
-                    {
-                        debug("thbr 4");
-
-                        timer_stop(gs->key_fds[thp[1].event.keycode_raw]);
-                        thp[1].active = false;
-
-                        ev->keystroke = DOWN;
-                        event_to_q(gs, ev);
-
-                        thp[1].event.st_keycodes = gs->th_conf[thp[1].event.keycode_raw].tap_keycodes;
-                        event_to_q(gs, &thp[1].event);
-                    }
-                    else
-                    {
-                        debug("thbr 5");
-
-                        ev->keystroke = DOWN;
-                        event_to_q(gs, ev);
-                    }
-                    ev->keystroke = UP;
-                    event_to_q(gs, ev);
+                    debug("thbr 4");
+                    thp[gs->thp_head].active = false;
+                    flush_thp_all(gs);
                 }
             }
         }
@@ -105,16 +105,15 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
             {
                 if (diff_t < gs->th_conf[ev->keycode_raw].idle_time)
                 {
-                    debug("thbr 6");
+                    debug("thbr 5");
                     ev->st_keycodes = gs->th_conf[ev->keycode_raw].tap_keycodes;
                 }
                 else
                 {
-                    debug("thbr 7");
+                    debug("thbr 6");
 
                     ev->st_keycodes = gs->th_conf[ev->keycode_raw].hold_keycodes;
-                    thp[0].active = true;
-                    thp[0].event = *ev;
+                    event_to_thp(gs, ev);
                     timer_start(gs, ev, gs->th_conf[ev->keycode_raw].hold_time);
                     return 0;
                 }
@@ -124,24 +123,17 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
         return 1;
     }
 
-    if (ev->keystroke == UP) return 1;
+    event_to_thp(gs, ev);
 
-    timer_stop(gs->key_fds[thp[0].event.keycode_raw]);
-    thp[0].active = false;
-
-    if (diff_t < gs->th_conf[thp[0].event.keycode_raw].idle_time)
+    if (ev->keystroke == UP)
     {
-        debug("thbr 8");
-        thp[0].event.st_keycodes = gs->th_conf[thp[0].event.keycode_raw].tap_keycodes;
-    }
-    else
-    {
-        debug("thbr 9");
-        thp[0].event.st_keycodes = gs->th_conf[thp[0].event.keycode_raw].hold_keycodes;
+        debug("thbr 7");
+        thp[gs->thp_head].active = false;
+        flush_thp_all(gs);
+        return 1;
     }
 
-    event_to_q(gs, &thp[0].event);
-    event_to_q(gs, ev);
+    debug("thbr 8");
 
-    return 1;
+    return 0;
 }
