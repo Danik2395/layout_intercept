@@ -25,6 +25,11 @@ Navigation:
     - [pressed_state_t](#pressed_state_t)
     - [th_pending_t](#th_pending_t)
     - [global_state_t](#global_state_t)
+- [config](#config)
+    - [taphold_config](#extern-const-th_conf_t-taphold_configkey_cnt)
+    - [timer_config](#extern-const-timer_conf_t-timer_configkey_cnt)
+    - [layers_config](#extern-const-key_batch_t-layers_configlayers_max_sizekey_cnt)
+    - [oneone_config](#extern-const-key_batch_t-oneone_configkey_cnt)
 - [utils](#utils)
     - [wanted_keycode](#static-inline-bool-wanted_keycodeuint16_t-code)
     - [wanted_event_mask](#static-inline-bool-wanted_event_maskconst-struct-input_event-ev)
@@ -48,21 +53,19 @@ Navigation:
     - [qwerty2layout_shifted](#extern-const-key_batch_t-qwerty2layout_shiftedkey_cnt)
     - [remap_key_layout](#int-remap_key_layoutconst-global_state_t-gs-internal_event_t-ev)
 - [layers](#layers)
-    - [layers_config](#extern-const-key_batch_t-layers_configlayers_max_sizekey_cnt)
     - [layer_enable](#static-inline-void-layer_enablelayer_t-mask-layer_t-layer)
     - [layer_disable](#static-inline-void-layer_disablelayer_t-mask-layer_t-layer)
     - [is_layer](#static-inline-bool-is_layerlayer_t-mask-layer_t-layer)
     - [remap_key_layer](#int-remap_key_layerconst-global_state_t-gs-internal_event_t-ev)
     - [handle_layer_key](#int-handle_layer_keyglobal_state_t-gs-const-internal_event_t-ev)
 - [oneone](#oneone)
-    - [oneone_config](#extern-const-key_batch_t-oneone_configkey_cnt)
     - [remap_key_oneone](#static-inline-int-remap_key_oneoneconst-global_state_t-gs-internal_event_t-ev)
 - [tap-hold](#tap-hold)
-    - [taphold_config](#extern-const-th_conf_t-taphold_configkey_cnt)
-    - [swap_events](#static-inline-void-swap_eventsinternal_event_t-ev-internal_event_t-ev1)
+    - [event_to_thp](#static-inline-void-event_to_thpglobal_state_t-gs-const-internal_event_t-ev)
+    - [flush_thp_all](#void-flush_thp_allglobal_state_t-gs)
+    - [flush_thp_rebuild](#int-flush_thp_rebuildglobal_state_t-gs)
     - [implement_tap_hold](#int-implement_tap_holdglobal_state_t-gs-internal_event_t-ev)
 - [overload-timer](#overload-timer)
-    - [timer_config](#extern-const-timer_conf_t-timer_configkey_cnt)
     - [implement_overload_timer](#int-implement_overload_timerglobal_state_t-gs-internal_event_t-ev)
 - [poll-operations](#poll-operations)
     - [ms_to_timespec](#static-inline-struct-timespec-ms_to_timespecuint64_t-ms)
@@ -182,6 +185,16 @@ Navigation:
 - layers_conf
 - key_type_lookup[KEY_CNT]
 
+## config
+
+### extern const th_conf_t taphold_config[KEY_CNT];
+
+### extern const timer_conf_t timer_config[KEY_CNT];
+
+### extern const key_batch_t layers_config[LAYERS_MAX_SIZE][KEY_CNT];
+
+### extern const key_batch_t oneone_config[KEY_CNT];
+
 ## utils
 
 ### static inline bool wanted_keycode(uint16_t code);
@@ -228,8 +241,6 @@ Navigation:
 
 ## layers
 
-### extern const key_batch_t layers_config[LAYERS_MAX_SIZE][KEY_CNT];
-
 ### static inline void layer_enable(layer_t* mask, layer_t layer);
 
 ### static inline void layer_disable(layer_t* mask, layer_t layer);
@@ -242,21 +253,19 @@ Navigation:
 
 ## oneone
 
-### extern const key_batch_t oneone_config[KEY_CNT];
-
 ### static inline int remap_key_oneone(const global_state_t* gs, internal_event_t* ev);
 
 ## tap-hold
 
-### extern const th_conf_t taphold_config[KEY_CNT];
+### static inline void event_to_thp(global_state_t* gs, const internal_event_t* ev);
 
-### static inline void swap_events(internal_event_t* ev, internal_event_t* ev1);
+### void flush_thp_all(global_state_t* gs);
+
+### int flush_thp_rebuild(global_state_t* gs);
 
 ### int implement_tap_hold(global_state_t* gs, internal_event_t* ev);
 
 ## overload-timer
-
-### extern const timer_conf_t timer_config[KEY_CNT];
 
 ### int implement_overload_timer(global_state_t* gs, internal_event_t* ev);
 
