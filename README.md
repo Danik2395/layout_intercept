@@ -6,7 +6,7 @@ It remaps physical qwerty layout to desired, manages layers and key overload: ta
 
 The goal was to replace xkb + keyd combo to use layout all across the system.
 
-**WIP: wrong architecture decision in tap-hold logic. Queue needed for pending instead of slots.**
+**WIP: need to implement mod cleaner. Now shortcuts work uncorrect.**
 
 <!-- [Main repo]() -->
 
