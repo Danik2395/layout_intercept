@@ -26,6 +26,7 @@ static inline void preclassify_key_type(const global_state_t* gs, internal_event
 
 static inline void event_to_q(global_state_t* gs, const internal_event_t* ev)
 {
+    debug("event to queue~");
     gs->send_q[++gs->q_pos] = *ev;
 }
 

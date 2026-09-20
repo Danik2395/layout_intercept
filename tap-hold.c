@@ -13,6 +13,8 @@ void flush_thp_all(global_state_t* gs)
     {
         if (thp[n].event.key_type == TAPHOLD)
         {
+            timer_stop(gs->key_fds[thp[n].event.keycode_raw]);
+
             const th_conf_t* thp_n_conf = &gs->th_conf[thp[n].event.keycode_raw];
             if (thp[n].active)
             {
@@ -83,7 +85,6 @@ int implement_tap_hold(global_state_t* gs, internal_event_t* ev)
             }
             else
             {
-                timer_stop(gs->key_fds[ev->keycode_raw]);
                 event_to_thp(gs, ev);
 
                 if (ev->keycode_raw == thp[gs->thp_head].event.keycode_raw)
