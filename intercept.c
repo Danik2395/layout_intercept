@@ -126,20 +126,21 @@ int main(void)
 
                 if (event.key_type == TAPHOLD)
                 {
+                    for (int n = gs.thp_head; n != gs.thp_tail; n = (n + 1) % THP_SIZE)
+                    {
+                        th_pending_t* thp = &gs.th_pending[n];
+                        if (thp->event.keycode_raw == event.keycode_raw)
+                        {
+                            thp->active = false;
+                        }
+                    }
+
                     if (gs.th_pending[gs.thp_head].event.keycode_raw == event.keycode_raw)
                     {
                         (void)flush_thp_rebuild(&gs);
                     }
                     else
                     {
-                        for (int n = gs.thp_head; n != gs.thp_tail; n = (n + 1) % THP_SIZE)
-                        {
-                            th_pending_t* thp = &gs.th_pending[n];
-                            if (thp->event.keycode_raw == event.keycode_raw)
-                            {
-                                thp->active = false;
-                            }
-                        }
                         continue;
                     }
                 }

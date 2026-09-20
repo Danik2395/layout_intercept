@@ -45,9 +45,6 @@ int flush_thp_rebuild(global_state_t* gs)
                 gs->thp_head = n;
                 return 1;
             }
-
-            const th_conf_t* thp_n_conf = &gs->th_conf[thp[n].event.keycode_raw];
-            thp[n].event.st_keycodes = thp_n_conf->tap_keycodes;
         }
 
         event_to_q(gs, &thp[n].event);
