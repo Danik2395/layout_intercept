@@ -36,7 +36,7 @@ const th_conf_t taphold_config[KEY_CNT] = {
 
 const timer_conf_t timer_config[KEY_CNT] = {
     [KEY_TAB] = {
-        .hold_time     = 200,
+        .hold_time     = 125,
         .tap_keycodes  = {{KEY_TAB}},
         .hold_keycodes = {{KEY_ESC}},
         .configured    = true,
