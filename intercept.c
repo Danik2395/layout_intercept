@@ -94,7 +94,7 @@ int main(void)
                 debug_val("value  ", "%d", event.keystroke);
                 debug_val("type   ", "%d", event.key_type);
 
-                if (remap_key_layer(&gs, &event) || remap_key_oneone(&gs, &event))
+                if (event.keystroke != UP && (remap_key_layer(&gs, &event) || remap_key_oneone(&gs, &event)))
                 {
                     finite_event(&gs, &event);
                     continue;
