@@ -573,6 +573,136 @@ logic_sequences: list[LogicSeqUnit] = [
                              340),
                     ]
                 ),
+        LogicSeqUnit(
+                name= "14. thp test queue",
+                write_seq= [
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
+                             0),
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 0, code= 0, value= 0),
+                             0),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 35, value= 1),
+                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
+                             50),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 1, code= 44, value= 1),
+                             100),
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 0, code= 0, value= 0),
+                             100),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 35, value= 0),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 1, code= 44, value= 0),
+                             200),
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 0, code= 0, value= 0),
+                             200),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 30, value= 0),
+                             250),
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 0, code= 0, value= 0),
+                             250),
+                    ],
+                target_seq = [
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 42, value= 1),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 21, value= 1),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 16, value= 1),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 21, value= 0),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 1, code= 16, value= 0),
+                             200),
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 0, code= 0, value= 0),
+                             200),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 42, value= 0),
+                             250),
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 0, code= 0, value= 0),
+                             250),
+                    ]
+                ),
+        LogicSeqUnit(
+                name= "15. thp test2 queue",
+                write_seq= [
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 1, code= 30, value= 1),
+                             0),
+                    TestUnit(InputEvent(seconds= 0, useconds= 0, ev_type= 0, code= 0, value= 0),
+                             0),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 1, code= 35, value= 1),
+                             50),
+                    TestUnit(InputEvent(seconds= 0, useconds= 50000, ev_type= 0, code= 0, value= 0),
+                             50),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 1, code= 44, value= 1),
+                             100),
+                    TestUnit(InputEvent(seconds= 0, useconds= 100000, ev_type= 0, code= 0, value= 0),
+                             100),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 30, value= 0),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 1, code= 44, value= 0),
+                             200),
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 0, code= 0, value= 0),
+                             200),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 35, value= 0),
+                             250),
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 0, code= 0, value= 0),
+                             250),
+                    ],
+                target_seq = [
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 49, value= 1),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 21, value= 1),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 16, value= 1),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 1, code= 49, value= 0),
+                             150),
+                    TestUnit(InputEvent(seconds= 0, useconds= 150000, ev_type= 0, code= 0, value= 0),
+                             150),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 1, code= 16, value= 0),
+                             200),
+                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 0, code= 0, value= 0),
+                             200),
+
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 21, value= 0),
+                             250),
+                    TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 0, code= 0, value= 0),
+                             250),
+                    ]
+                ),
         ]
 
 bad_macro_seq: list[TestUnit] = [
