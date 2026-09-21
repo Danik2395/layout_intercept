@@ -157,7 +157,7 @@ int main(void)
                 debug_val("type", "%d", send_event->key_type);
                 debug_val("layers_mask before", "%d", gs.layers_mask);
 
-                (void)handle_layer_key(&gs, send_event);
+                (void)toggle_layer(&gs, send_event);
 
                 debug_val("layers_mask after_1", "%d", gs.layers_mask);
 
@@ -175,7 +175,7 @@ int main(void)
                     send_event->st_keycodes = gs.pressed_state[send_event->keycode_raw].keycodes_sent;
                     send_event->key_type    = gs.pressed_state[send_event->keycode_raw].key_type;
                     send_event->layer       = gs.pressed_state[send_event->keycode_raw].layer_held;
-                    (void)handle_layer_key(&gs, send_event);
+                    (void)toggle_layer(&gs, send_event);
                     debug_val("layers_mask after_2", "%d", gs.layers_mask);
                     finite_event(&gs, send_event);
                     continue;

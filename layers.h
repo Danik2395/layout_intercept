@@ -29,4 +29,4 @@ int remap_key_layer(const global_state_t* gs, internal_event_t* ev);
 
 // return 1 if layer was changed,
 // return 0 if wasn't
-int handle_layer_key(global_state_t* gs, const internal_event_t* ev);
+int toggle_layer(global_state_t* gs, const internal_event_t* ev);

@@ -57,7 +57,7 @@ Navigation:
     - [layer_disable](#static-inline-void-layer_disablelayer_t-mask-layer_t-layer)
     - [is_layer](#static-inline-bool-is_layerlayer_t-mask-layer_t-layer)
     - [remap_key_layer](#int-remap_key_layerconst-global_state_t-gs-internal_event_t-ev)
-    - [handle_layer_key](#int-handle_layer_keyglobal_state_t-gs-const-internal_event_t-ev)
+    - [toggle_layer](#int-toggle_layerglobal_state_t-gs-const-internal_event_t-ev)
 - [oneone](#oneone)
     - [remap_key_oneone](#static-inline-int-remap_key_oneoneconst-global_state_t-gs-internal_event_t-ev)
 - [tap-hold](#tap-hold)
@@ -249,7 +249,7 @@ Navigation:
 
 ### int remap_key_layer(const global_state_t* gs, internal_event_t* ev);
 
-### int handle_layer_key(global_state_t* gs, const internal_event_t* ev);
+### int toggle_layer(global_state_t* gs, const internal_event_t* ev);
 
 ## oneone
 
