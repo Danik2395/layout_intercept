@@ -1,6 +1,5 @@
 #include <linux/input-event-codes.h>
-#include <stdint.h>
-#include "../layout.h"
+#include "../src/layout.h"
 
 const key_batch_t qwerty2layout[KEY_CNT] = {
     // Numbers row

@@ -5,7 +5,8 @@ CC     := gcc
 CFLAGS := -O2 -Wall -Wextra -pedantic -Wconversion -Wshadow -Werror
 
 BUILD_DIR := ./bin
-SRCS      := $(wildcard *.c) layouts/${LAYOUT}_layout.c
+SRC_DIR   := ./src
+SRCS      := $(wildcard ${SRC_DIR}/*.c) layouts/${LAYOUT}_layout.c
 OBJS      := $(patsubst %.c, ${OBJ_DIR}/%.o, ${SRCS})
 
 .PHONY: clean all debug release test testall
