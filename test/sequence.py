@@ -401,10 +401,10 @@ logic_sequences: list[LogicSeqUnit] = [
                              250),
                     ],
                 target_seq = [
-                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 1, code= 1, value= 1),
-                             200),
-                    TestUnit(InputEvent(seconds= 0, useconds= 200000, ev_type= 0, code= 0, value= 0),
-                             200),
+                    TestUnit(InputEvent(seconds= 0, useconds= 125000, ev_type= 1, code= 1, value= 1),
+                             125),
+                    TestUnit(InputEvent(seconds= 0, useconds= 125000, ev_type= 0, code= 0, value= 0),
+                             125),
 
                     TestUnit(InputEvent(seconds= 0, useconds= 250000, ev_type= 1, code= 1, value= 0),
                              250),
