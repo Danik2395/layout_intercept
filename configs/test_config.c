@@ -1,7 +1,7 @@
 #include <linux/input-event-codes.h>
 #include <stdbool.h>
-#include "config.h"
-#include "types.h"
+#include "../src/config.h"
+#include "../src/types.h"
 
 const th_conf_t taphold_config[KEY_CNT] = {
     [KEY_A] = {
